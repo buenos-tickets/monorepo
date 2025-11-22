@@ -6,6 +6,7 @@ This file documents the use of AI tools during the project development process.
 
 ## AI Tools Used
 - **Cursor AI** (Claude Sonnet 4.5)
+- **Gemini**
 - Code auto-completion, debugging, code review, and optimization suggestions
 
 ---
@@ -22,9 +23,12 @@ This file documents the use of AI tools during the project development process.
 ## Contract
 
 ### [2025-11-22] Title
-- **File**: `contracts/BuenosTickets/contracts/blahblah.sol`
+- **File**: `contracts/BuenosTickets/contracts/BuenosTickets.sol`
 - **Description**: description here
-- **AI Role**: ai role here
+- **AI Role**:
+   - Gemini was used to write a draft version of smart contract. Prompt is available at https://github.com/buenos-tickets/monorepo/tree/main/contracts#workflow-prompt-for-gemini-when-writing-a-draft-of-smart-contract
+   - Sonnet 4.5 was used in Cursor while improving Smart contract.
+   - Sonnet 4.5 was used in Cursor when writing unit tests for Smart contract.
 
 ---
 
