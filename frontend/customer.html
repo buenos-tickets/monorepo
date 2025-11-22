@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tango Ticket Sales</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,12 +30,56 @@
             margin: 5px 0;
             box-sizing: border-box;
         }
+        #transactionStatus {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            max-width: 100%;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
     <h1>X402 Payment System - Customer</h1>
 
-    <!-- ==================== Section 1: Configuration ==================== -->
+    <!-- ==================== Section 1: Ticket Purchase ==================== -->
+    <div class="section">
+        <h2>🎫 Ticket Purchase</h2>
+        <p><strong>Description:</strong> Blah blah blah</p>
+        
+        <button id="payTicketBtn" style="
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        ">
+            Pay Ticket
+        </button>
+
+        <button id="payTicketWithoutX402Btn" style="
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        ">
+            Pay Ticket without x402
+        </button>
+
+        <div id="transactionStatus" style="margin-top: 15px; padding: 10px; display: none;"></div>
+    </div>
+
+    <!-- ==================== Section 2: Configuration ==================== -->
     <div class="section">
         <h2>Configuration</h2>
         <p><strong>Description:</strong> Basic settings for x402 payment. You can modify these values if needed.</p>
@@ -57,7 +102,7 @@
         </ul>
     </div>
 
-    <!-- ==================== Section 2: Contract State Information ==================== -->
+    <!-- ==================== Section 3: Contract State Information ==================== -->
     <div class="section">
         <h2>📊 BuenosTickets Contract State</h2>
         <p><strong>Description:</strong> Real-time status information retrieved from the smart contract.</p>
@@ -69,7 +114,7 @@
         </ul>
     </div>
 
-    <!-- ==================== Section 3: Event Information ==================== -->
+    <!-- ==================== Section 4: Event Information ==================== -->
     <div class="section">
         <h2>🎭 Event Information</h2>
         <p><strong>Description:</strong> Blah blah blah</p>
@@ -97,25 +142,141 @@
         </div>
     </div>
 
-    <!-- ==================== Section 4: Ticket Purchase ==================== -->
-    <div class="section">
-        <h2>🎫 Ticket Purchase</h2>
-        <p><strong>Description:</strong> Blah blah blah</p>
-        
-        <button id="buyTicketBtn" style="
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        ">
-            Buy Ticket
-        </button>
-    </div>
+    <script>
+        // Base Sepolia Network Configuration
+        const BASE_SEPOLIA_CONFIG = {
+            chainId: '0x14a34', // 84532 in hex
+            chainName: 'Base Sepolia',
+            nativeCurrency: {
+                name: 'Ethereum',
+                symbol: 'ETH',
+                decimals: 18
+            },
+            rpcUrls: ['https://sepolia.base.org'],
+            blockExplorerUrls: ['https://sepolia.basescan.org']
+        };
+
+        // USDC Contract on Base Sepolia (테스트용)
+        const USDT_CONTRACT_ADDRESS = '0x036CbD53842c5426634e7929541eC2318f3dCF7e'; // Base Sepolia USDC
+        const RECIPIENT_ADDRESS = '0xefa21bf6343748f95f6949f7aaa7df88f0ee6992';
+        const AMOUNT = '0.001'; // USDT amount
+
+        // ERC20 ABI (Transfer function only)
+        const ERC20_ABI = [
+            'function transfer(address to, uint256 amount) returns (bool)',
+            'function decimals() view returns (uint8)',
+            'function balanceOf(address account) view returns (uint256)',
+            'function symbol() view returns (string)'
+        ];
+
+        document.getElementById('payTicketWithoutX402Btn').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('transactionStatus');
+            
+            try {
+                // Check if ethers.js is loaded
+                if (typeof ethers === 'undefined') {
+                    alert('Error: ethers.js library not loaded.');
+                    return;
+                }
+
+                // Check if MetaMask is installed
+                if (typeof window.ethereum === 'undefined') {
+                    alert('Please install MetaMask to use this feature!');
+                    return;
+                }
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
+
+                // Request account access
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                // Check current network
+                const network = await provider.getNetwork();
+                const currentChainId = '0x' + network.chainId.toString(16);
+
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
+
+                // Switch to Base Sepolia if not already connected
+                if (currentChainId !== BASE_SEPOLIA_CONFIG.chainId) {
+                    statusDiv.innerHTML = `🔄 Switching to Base Sepolia network...<br>Please approve in MetaMask`;
+                    
+                    try {
+                        await window.ethereum.request({
+                            method: 'wallet_switchEthereumChain',
+                            params: [{ chainId: BASE_SEPOLIA_CONFIG.chainId }],
+                        });
+                    } catch (switchError) {
+                        // This error code indicates that the chain has not been added to MetaMask
+                        if (switchError.code === 4902) {
+                            statusDiv.innerHTML = `🔄 Adding Base Sepolia network...<br>Please approve in MetaMask`;
+                            await window.ethereum.request({
+                                method: 'wallet_addEthereumChain',
+                                params: [BASE_SEPOLIA_CONFIG],
+                            });
+                        } else {
+                            throw switchError;
+                        }
+                    }
+                }
+
+                // Connect to USDT contract
+                const usdtContract = new ethers.Contract(USDT_CONTRACT_ADDRESS, ERC20_ABI, signer);
+                
+                statusDiv.innerHTML = `🔄 Getting token information...`;
+                
+                // Get token decimals and symbol
+                const decimals = await usdtContract.decimals();
+                const symbol = await usdtContract.symbol();
+                
+                // Convert amount to proper units
+                const amountInUnits = ethers.utils.parseUnits(AMOUNT, decimals);
+
+                statusDiv.innerHTML = `🔄 Sending ${AMOUNT} ${symbol} to ${RECIPIENT_ADDRESS}...<br>Please confirm in MetaMask`;
+
+                // Send USDT transaction
+                const tx = await usdtContract.transfer(RECIPIENT_ADDRESS, amountInUnits);
+                
+                statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
+
+                // Wait for transaction to be mined
+                const receipt = await tx.wait();
+
+                statusDiv.style.backgroundColor = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.innerHTML = `✅ Transaction successful!<br>
+                    Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
+                    Block: ${receipt.blockNumber}<br>
+                    Amount: ${AMOUNT} ${symbol}`;
+
+            } catch (error) {
+                console.error('Transaction error:', error);
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                
+                let errorMessage = 'Transaction failed!';
+                if (error.code === 4001) {
+                    errorMessage = '❌ Transaction rejected by user';
+                } else if (error.code === -32603) {
+                    errorMessage = '❌ Insufficient USDT balance or gas (ETH)';
+                } else if (error.code === 4902) {
+                    errorMessage = '❌ Failed to add Base Sepolia network';
+                } else if (error.message && error.message.includes('insufficient funds')) {
+                    errorMessage = '❌ Insufficient USDT balance or ETH for gas';
+                } else {
+                    errorMessage = `❌ Error: ${error.message}`;
+                }
+                
+                statusDiv.innerHTML = errorMessage;
+            }
+        });
+    </script>
 
 </body>
 </html>
