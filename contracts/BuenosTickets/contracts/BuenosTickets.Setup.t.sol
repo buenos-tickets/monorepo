@@ -9,6 +9,7 @@ contract BuenosTicketsSetupTest {
     MockUSDC public mockUSDC;
     
     address public admin;
+    address public mockEntropyAddress = address(0x999); // Mock entropy address
     uint256 public ticketPrice = 1000000; // 1 USDC (6 decimals)
     uint256 public maxTickets = 2;
     uint256 public duration = 100; // 100 blocks
@@ -16,7 +17,7 @@ contract BuenosTicketsSetupTest {
     function setUp() public {
         admin = address(this);
         mockUSDC = new MockUSDC();
-        ticketSale = new BuenosTickets(address(mockUSDC));
+        ticketSale = new BuenosTickets(address(mockUSDC), mockEntropyAddress);
     }
 
     // === Deployment Tests ===

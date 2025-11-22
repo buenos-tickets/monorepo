@@ -130,10 +130,8 @@ contract BuenosTickets is IEntropyConsumer{
         isSettled = true;
         uint256 soldTickets = 0;
 
-        // Determine the number of winners (Min of reserved users or max available tickets)
-        uint256 winners = totalReserved < maxTickets ? totalReserved : maxTickets;
         if (totalReserved < maxTickets) {
-            // 1. Select Winners (FCFS based on reservationOrder)
+            // FCFS: All reservations become winners
             for (uint256 i = 0; i < totalReserved; i++) {
                 address user = reservationOrder[i];
                 Reservation storage res = reservations[user];
@@ -146,6 +144,7 @@ contract BuenosTickets is IEntropyConsumer{
 
             emit SaleSettled(soldTickets, totalRevenue);
         } else {
+            // Lottery: Request random number from Pyth Network
             uint256 fee = entropy.getFeeV2();
             sequenceNumber = entropy.requestV2{ value: fee }();
         }
@@ -161,7 +160,7 @@ contract BuenosTickets is IEntropyConsumer{
     // See the callback debugging guide here to identify the error https://docs.pyth.network/entropy/debug-callback-failures
     function entropyCallback(
         uint64 _sequenceNumber,
-        address _provider,
+        address /* _provider */,
         bytes32 _randomNumber
     ) internal override {
         require(sequenceNumber == _sequenceNumber, "TS: Invalid Pyth Entropy callback called");
