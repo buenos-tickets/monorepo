@@ -9,10 +9,20 @@ Payment will be collected in advance, and refunds will be issued to those not se
 ```mermaid
 sequenceDiagram
   participant Users
-  participant Backend
+  participant Seller
   Users->>Contract: Buy tickets
-  Backend->>Contract: End sales
+  Users->>Contract: End sales by anyone
+  activate Contract
   Contract->>Pyth: Request entropy
+  deactivate Contract
   Pyth->>Contract: Return random number by callback
-  Users->>Contract: Check results
+  par check results
+    Users->>Contract: Check results
+  and refund
+    Users->>Contract: Request refunds
+    Contract->>Users: Refunds
+  and settlement
+    Seller->>Contract: Request sales revenue
+    Contract->>Seller: Send the fund
+  end
 ```
