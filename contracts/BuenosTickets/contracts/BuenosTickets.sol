@@ -32,6 +32,7 @@ contract BuenosTickets {
     event SaleSettled(uint256 soldTickets, uint256 totalRevenue);
     event Refunded(address indexed user, uint256 amount);
     event AdminWithdrew(uint256 amount);
+    event ContractReset(uint256 usdcWithdrawn);
 
     // --- Modifiers ---
     modifier onlyAdmin() {
@@ -200,5 +201,36 @@ contract BuenosTickets {
      */
     function getUserStatus(address user) external view returns (Status) {
         return reservations[user].status;
+    }
+
+    /**
+     * @notice Admin resets the contract to initial state and withdraws all remaining USDC.
+     * This function withdraws all USDC held by the contract and resets all state variables.
+     * WARNING: This clears all reservation data. Use with caution.
+     */
+    function reset() external onlyAdmin {
+        // 1. Withdraw all USDC balance to admin
+        uint256 contractBalance = usdcToken.balanceOf(address(this));
+        if (contractBalance > 0) {
+            bool success = usdcToken.transfer(admin, contractBalance);
+            require(success, "TS: Reset USDC withdrawal failed");
+        }
+
+        // 2. Clear all reservations for users who participated
+        for (uint256 i = 0; i < reservationOrder.length; i++) {
+            delete reservations[reservationOrder[i]];
+        }
+
+        // 3. Clear the reservation order array
+        delete reservationOrder;
+
+        // 4. Reset state variables to initial values
+        endBlock = 0;
+        ticketPrice = 0;
+        maxTickets = 0;
+        totalReserved = 0;
+        isSettled = false;
+
+        emit ContractReset(contractBalance);
     }
 }
