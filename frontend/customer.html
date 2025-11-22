@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X402 Payment - Customer View</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <h1>X402 Payment System - Customer</h1>
+
+    <!-- ==================== Section 1: Configuration ==================== -->
+    <div class="section">
+        <h2>Configuration</h2>
+        <p><strong>Description:</strong> Basic settings for x402 payment. You can modify these values if needed.</p>
+        
+        <h3>RPC Node Information</h3>
+        <ul>
+            <li>Chain ID : <input type="text" id="chainId" value="" /></li>
+            <li>RPC URL : <input type="text" id="rpcUrl" value="" /></li>
+        </ul>
+
+        <h3>BuenosTickets Smart Contract Address</h3>
+        <ul>
+            <li>BuenosTickets Contract Address : <input type="text" id="contractAddress" value="" /></li>
+        </ul>
+
+        <h3>Facilitator Information</h3>
+        <ul>
+            <li>Facilitator Address: <input type="text" id="facilitatorAddress" value="" /></li>
+            <li>Facilitator API Endpoint: <input type="text" id="facilitatorApiEndpoint" value="" /></li>
+        </ul>
+    </div>
+
+    <!-- ==================== Section 2: Contract State Information ==================== -->
+    <div class="section">
+        <h2>📊 BuenosTickets Contract State</h2>
+        <p><strong>Description:</strong> Real-time status information retrieved from the smart contract.</p>
+        
+        <ul>
+            <li><strong>Deadline:</strong> <span id="deadline">[Query from contract]</span></li>
+            <li><strong>Total Tickets for Sale:</strong> <span id="totalTickets">[Query from contract]</span></li>
+            <li><strong>Number of Buyers:</strong> <span id="buyerCount">[Query from contract]</span></li>
+        </ul>
+    </div>
+
+    <!-- ==================== Section 3: Event Information ==================== -->
+    <div class="section">
+        <h2>🎭 Event Information</h2>
+        <p><strong>Description:</strong> Blah blah blah</p>
+        
+        <!-- TODO: Display event poster image -->
+        <div>
+            <h3>Poster</h3>
+            
+            <p><img src="" alt="" style="max-width: 100%;" /></p>
+        </div>
+
+        <!-- TODO: Display event details -->
+        <div>
+            <h3>Title</h3>
+            <p id="eventTitle">Blah blah blah</p>
+
+            <h3>Description</h3>
+            <p id="eventDescription">Blah blah blah</p>
+
+            <h3>Ticket Price</h3>
+            <p id="ticketPrice">0.01 USDC</p>
+
+            <h3>Deadline</h3>
+            <p id="eventDeadline">12 Dec 2025</p>
+        </div>
+    </div>
+
+    <!-- ==================== Section 4: Ticket Purchase ==================== -->
+    <div class="section">
+        <h2>🎫 Ticket Purchase</h2>
+        <p><strong>Description:</strong> Blah blah blah</p>
+        
+        <button id="buyTicketBtn" style="
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        ">
+            Buy Ticket
+        </button>
+    </div>
+
+</body>
+</html>
