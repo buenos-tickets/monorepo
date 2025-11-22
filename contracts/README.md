@@ -12,7 +12,7 @@ We are going to use Pyth network to generate a random number.
 - refund (invoked by user))
 - settlement (invoked by Seller)
 
-### Workflow
+### Workflow (Prompt for Gemini when writing a draft of smart contract)
 
 1. Setup a ticket sale (`setupSale`)
    - Admin setup a ticket sale with following parameters
