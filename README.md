@@ -10,6 +10,7 @@ Payment will be collected in advance, and refunds will be issued to those not se
 sequenceDiagram
   participant Users
   participant Seller
+  Seller->>Contract: Setup the campaign 
   Users->>Contract: Buy tickets
   Users->>Contract: End sales by anyone
   activate Contract
