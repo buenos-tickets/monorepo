@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buenos Tickets - Merchant Admin</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            margin-top: 0;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .info-box {
+            background-color: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+        
+        .info-box p {
+            margin: 5px 0;
+            color: #333;
+        }
+        
+        .info-box strong {
+            color: #667eea;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .param-input {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 120px;
+            transition: border-color 0.3s;
+        }
+        
+        .param-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            text-align: center;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        
+        #resultDisplay {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            max-width: 100%;
+            overflow: auto;
+            background-color: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+        
+        .status-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        
+        .status-error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        
+        .status-info {
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+            color: #0c5460;
+        }
+        
+        .status-warning {
+            background-color: #fff3cd;
+            border-color: #ffeaa7;
+            color: #856404;
+        }
+        
+        .flex-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .flex-container label {
+            min-width: 100px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: #ffc107;
+            color: #333;
+        }
+        
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎭 Buenos Tickets - Merchant Admin Panel</h1>
+
+    <!-- 환경 정보 섹션 -->
+    <div class="section">
+        <h2>🌐 환경 정보</h2>
+        <div class="info-box">
+            <p><strong>네트워크:</strong> Base Sepolia</p>
+            <p><strong>Chain ID:</strong> 84532</p>
+            <p><strong>RPC URL:</strong> https://sepolia.base.org</p>
+            <p><strong>컨트랙트 주소:</strong> <a href="https://sepolia.basescan.org/address/0x55593D961274e6B08D0880fb10CE9E2E69F865c6" target="_blank">0x55593D961274e6B08D0880fb10CE9E2E69F865c6</a></p>
+            <p><strong>탐색기:</strong> <a href="https://sepolia.basescan.org" target="_blank">Base Sepolia Explorer</a></p>
+        </div>
+    </div>
+
+    <!-- 컨트랙트 상태 조회 섹션 -->
+    <div class="section">
+        <h2>📊 컨트랙트 상태 조회</h2>
+        <p><strong>설명:</strong> 현재 티켓 판매 설정 및 상태 정보를 조회합니다.</p>
+        
+        <button class="btn-info" id="getSaleInfoBtn">
+            🔍 getSaleInfo() 호출
+        </button>
+        
+        <div id="saleInfoDisplay" style="margin-top: 15px; display: none;" class="info-box">
+            <p><strong>종료 블록:</strong> <span id="endBlock">-</span></p>
+            <p><strong>티켓 가격:</strong> <span id="ticketPrice">-</span> USDC</p>
+            <p><strong>최대 티켓 수:</strong> <span id="maxTickets">-</span></p>
+            <p><strong>예약된 티켓:</strong> <span id="totalReserved">-</span></p>
+            <p><strong>정산 완료:</strong> <span id="isSettled">-</span></p>
+        </div>
+    </div>
+
+    <!-- 판매 설정 섹션 -->
+    <div class="section">
+        <h2>⚙️ 판매 설정</h2>
+        <p><strong>설명:</strong> 새로운 티켓 판매를 설정합니다. (Admin 전용)</p>
+        
+        <div class="flex-container">
+            <label>Duration:</label>
+            <input type="number" class="param-input" id="durationInput" value="10" placeholder="블록 수">
+            <span style="font-size: 12px; color: #666;">블록</span>
+        </div>
+        
+        <div class="flex-container">
+            <label>Price:</label>
+            <input type="number" class="param-input" id="priceInput" value="0.001" step="0.001" placeholder="USDC">
+            <span style="font-size: 12px; color: #666;">USDC</span>
+        </div>
+        
+        <div class="flex-container">
+            <label>Max Tickets:</label>
+            <input type="number" class="param-input" id="maxTicketsInput" value="2" placeholder="티켓 수">
+            <span style="font-size: 12px; color: #666;">장</span>
+        </div>
+        
+        <button class="btn-success" id="setupSaleBtn">
+            🚀 setupSale() 실행
+        </button>
+    </div>
+
+    <!-- 판매 관리 섹션 -->
+    <div class="section">
+        <h2>💼 판매 관리</h2>
+        <p><strong>설명:</strong> 판매 정산 및 자금 인출을 관리합니다. (Admin 전용)</p>
+        
+        <div class="button-group">
+            <button class="btn-warning" id="settleSaleBtn">
+                ✅ settleSale() 실행
+            </button>
+            
+            <button class="btn-success" id="withdrawFundsBtn">
+                💰 withdrawFunds() 실행
+            </button>
+        </div>
+    </div>
+
+    <!-- 컨트랙트 초기화 섹션 -->
+    <div class="section">
+        <h2>🔄 컨트랙트 초기화</h2>
+        <p><strong>설명:</strong> 컨트랙트를 초기 상태로 리셋합니다. (Admin 전용)</p>
+        <p style="color: #dc3545; font-weight: 600;">⚠️ 경고: 모든 예약 데이터가 삭제되고 남은 USDC가 Admin에게 전송됩니다.</p>
+        
+        <button class="btn-danger" id="resetBtn">
+            🔥 reset() 실행
+        </button>
+    </div>
+
+    <!-- 결과 표시 섹션 -->
+    <div class="section">
+        <h2>📋 실행 결과</h2>
+        <div id="resultDisplay">
+대기 중... 위 버튼을 클릭하여 스마트 컨트랙트와 통신하세요.
+        </div>
+    </div>
+
+    <script>
+        // Base Sepolia Network Configuration
+        const BASE_SEPOLIA_CONFIG = {
+            chainId: '0x14a34', // 84532 in hex
+            chainName: 'Base Sepolia',
+            nativeCurrency: {
+                name: 'Ethereum',
+                symbol: 'ETH',
+                decimals: 18
+            },
+            rpcUrls: ['https://sepolia.base.org'],
+            blockExplorerUrls: ['https://sepolia.basescan.org']
+        };
+
+        // Contract Address
+        const CONTRACT_ADDRESS = '0x55593D961274e6B08D0880fb10CE9E2E69F865c6';
+
+        // BuenosTickets Contract ABI
+        const CONTRACT_ABI = [
+            'function getSaleInfo() external view returns (uint256 _endBlock, uint256 _ticketPrice, uint256 _maxTickets, uint256 _totalReserved, bool _isSettled)',
+            'function setupSale(uint256 _duration, uint256 _price, uint256 _maxTickets) external',
+            'function settleSale() external',
+            'function withdrawFunds() external',
+            'function reset() external',
+            'function admin() view returns (address)',
+            'function usdcToken() view returns (address)'
+        ];
+
+        // Helper function to switch to Base Sepolia
+        async function switchToBaseSepolia() {
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const network = await provider.getNetwork();
+            const currentChainId = '0x' + network.chainId.toString(16);
+
+            if (currentChainId !== BASE_SEPOLIA_CONFIG.chainId) {
+                try {
+                    await window.ethereum.request({
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: BASE_SEPOLIA_CONFIG.chainId }],
+                    });
+                } catch (switchError) {
+                    if (switchError.code === 4902) {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [BASE_SEPOLIA_CONFIG],
+                        });
+                    } else {
+                        throw switchError;
+                    }
+                }
+            }
+        }
+
+        // Helper function to display result
+        function displayResult(message, type = 'info') {
+            const resultDiv = document.getElementById('resultDisplay');
+            resultDiv.className = '';
+            resultDiv.classList.add('status-' + type);
+            resultDiv.textContent = message;
+        }
+
+        // Helper function to format USDC amount
+        function formatUSDC(amount) {
+            return ethers.utils.formatUnits(amount, 6);
+        }
+
+        // getSaleInfo Button Handler
+        document.getElementById('getSaleInfoBtn').addEventListener('click', async () => {
+            try {
+                displayResult('🔄 컨트랙트에 연결 중...', 'info');
+
+                if (typeof window.ethereum === 'undefined') {
+                    displayResult('❌ MetaMask를 설치해주세요!', 'error');
+                    return;
+                }
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                
+                displayResult('🔄 네트워크 확인 중...', 'info');
+                await switchToBaseSepolia();
+
+                displayResult('🔄 getSaleInfo() 호출 중...', 'info');
+
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+                const saleInfo = await contract.getSaleInfo();
+
+                // Update display
+                document.getElementById('endBlock').textContent = saleInfo._endBlock.toString();
+                document.getElementById('ticketPrice').textContent = formatUSDC(saleInfo._ticketPrice);
+                document.getElementById('maxTickets').textContent = saleInfo._maxTickets.toString();
+                document.getElementById('totalReserved').textContent = saleInfo._totalReserved.toString();
+                document.getElementById('isSettled').textContent = saleInfo._isSettled ? '예 ✅' : '아니오 ❌';
+                document.getElementById('saleInfoDisplay').style.display = 'block';
+
+                const result = `✅ 판매 정보 조회 성공!\n\n` +
+                    `종료 블록: ${saleInfo._endBlock.toString()}\n` +
+                    `티켓 가격: ${formatUSDC(saleInfo._ticketPrice)} USDC\n` +
+                    `최대 티켓: ${saleInfo._maxTickets.toString()}장\n` +
+                    `예약된 티켓: ${saleInfo._totalReserved.toString()}장\n` +
+                    `정산 완료: ${saleInfo._isSettled ? '예' : '아니오'}`;
+
+                displayResult(result, 'success');
+
+            } catch (error) {
+                console.error('getSaleInfo error:', error);
+                let errorMessage = '❌ 판매 정보 조회 실패!\n\n';
+                if (error.message) {
+                    errorMessage += `오류: ${error.message}`;
+                }
+                displayResult(errorMessage, 'error');
+            }
+        });
+
+        // setupSale Button Handler
+        document.getElementById('setupSaleBtn').addEventListener('click', async () => {
+            try {
+                displayResult('🔄 MetaMask 연결 중...', 'warning');
+
+                if (typeof window.ethereum === 'undefined') {
+                    displayResult('❌ MetaMask를 설치해주세요!', 'error');
+                    return;
+                }
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                displayResult(`🔄 연결됨: ${userAddress}\n네트워크 확인 중...`, 'warning');
+                await switchToBaseSepolia();
+
+                // Get parameters
+                const duration = document.getElementById('durationInput').value;
+                const priceInUSDC = document.getElementById('priceInput').value;
+                const maxTickets = document.getElementById('maxTicketsInput').value;
+
+                // Convert price to USDC units (6 decimals)
+                const priceInUnits = ethers.utils.parseUnits(priceInUSDC, 6);
+
+                displayResult(`🔄 setupSale() 실행 중...\n\nDuration: ${duration} 블록\nPrice: ${priceInUSDC} USDC\nMax Tickets: ${maxTickets}장\n\nMetaMask에서 트랜잭션을 승인해주세요...`, 'warning');
+
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                const tx = await contract.setupSale(duration, priceInUnits, maxTickets);
+
+                displayResult(`🔄 트랜잭션 전송됨!\n\nHash: ${tx.hash}\n확인 대기 중...`, 'warning');
+
+                const receipt = await tx.wait();
+
+                const result = `✅ setupSale() 실행 성공!\n\n` +
+                    `트랜잭션 해시: ${receipt.transactionHash}\n` +
+                    `블록 번호: ${receipt.blockNumber}\n` +
+                    `가스 사용량: ${receipt.gasUsed.toString()}\n\n` +
+                    `설정된 값:\n` +
+                    `- Duration: ${duration} 블록\n` +
+                    `- Price: ${priceInUSDC} USDC\n` +
+                    `- Max Tickets: ${maxTickets}장\n\n` +
+                    `탐색기: https://sepolia.basescan.org/tx/${receipt.transactionHash}`;
+
+                displayResult(result, 'success');
+
+            } catch (error) {
+                console.error('setupSale error:', error);
+                let errorMessage = '❌ setupSale() 실행 실패!\n\n';
+                if (error.code === 4001) {
+                    errorMessage += '사용자가 트랜잭션을 거부했습니다.';
+                } else if (error.message && error.message.includes('Sale already set up')) {
+                    errorMessage += '이미 판매가 설정되어 있습니다. reset()을 먼저 실행하세요.';
+                } else if (error.message && error.message.includes('Only admin')) {
+                    errorMessage += 'Admin 권한이 필요합니다.';
+                } else if (error.message) {
+                    errorMessage += `오류: ${error.message}`;
+                }
+                displayResult(errorMessage, 'error');
+            }
+        });
+
+        // settleSale Button Handler
+        document.getElementById('settleSaleBtn').addEventListener('click', async () => {
+            try {
+                displayResult('🔄 MetaMask 연결 중...', 'warning');
+
+                if (typeof window.ethereum === 'undefined') {
+                    displayResult('❌ MetaMask를 설치해주세요!', 'error');
+                    return;
+                }
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                displayResult(`🔄 연결됨: ${userAddress}\n네트워크 확인 중...`, 'warning');
+                await switchToBaseSepolia();
+
+                displayResult(`🔄 settleSale() 실행 중...\n\nMetaMask에서 트랜잭션을 승인해주세요...`, 'warning');
+
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                const tx = await contract.settleSale();
+
+                displayResult(`🔄 트랜잭션 전송됨!\n\nHash: ${tx.hash}\n확인 대기 중...`, 'warning');
+
+                const receipt = await tx.wait();
+
+                const result = `✅ settleSale() 실행 성공!\n\n` +
+                    `트랜잭션 해시: ${receipt.transactionHash}\n` +
+                    `블록 번호: ${receipt.blockNumber}\n` +
+                    `가스 사용량: ${receipt.gasUsed.toString()}\n\n` +
+                    `판매가 정산되었습니다.\n` +
+                    `당첨자가 선정되고 낙첨자는 환불받을 수 있습니다.\n\n` +
+                    `탐색기: https://sepolia.basescan.org/tx/${receipt.transactionHash}`;
+
+                displayResult(result, 'success');
+
+            } catch (error) {
+                console.error('settleSale error:', error);
+                let errorMessage = '❌ settleSale() 실행 실패!\n\n';
+                if (error.code === 4001) {
+                    errorMessage += '사용자가 트랜잭션을 거부했습니다.';
+                } else if (error.message && error.message.includes('Sale is still active')) {
+                    errorMessage += '판매 기간이 아직 종료되지 않았습니다.';
+                } else if (error.message && error.message.includes('already settled')) {
+                    errorMessage += '이미 정산이 완료되었습니다.';
+                } else if (error.message && error.message.includes('Only admin')) {
+                    errorMessage += 'Admin 권한이 필요합니다.';
+                } else if (error.message) {
+                    errorMessage += `오류: ${error.message}`;
+                }
+                displayResult(errorMessage, 'error');
+            }
+        });
+
+        // withdrawFunds Button Handler
+        document.getElementById('withdrawFundsBtn').addEventListener('click', async () => {
+            try {
+                displayResult('🔄 MetaMask 연결 중...', 'warning');
+
+                if (typeof window.ethereum === 'undefined') {
+                    displayResult('❌ MetaMask를 설치해주세요!', 'error');
+                    return;
+                }
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                displayResult(`🔄 연결됨: ${userAddress}\n네트워크 확인 중...`, 'warning');
+                await switchToBaseSepolia();
+
+                displayResult(`🔄 withdrawFunds() 실행 중...\n\nMetaMask에서 트랜잭션을 승인해주세요...`, 'warning');
+
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                const tx = await contract.withdrawFunds();
+
+                displayResult(`🔄 트랜잭션 전송됨!\n\nHash: ${tx.hash}\n확인 대기 중...`, 'warning');
+
+                const receipt = await tx.wait();
+
+                const result = `✅ withdrawFunds() 실행 성공!\n\n` +
+                    `트랜잭션 해시: ${receipt.transactionHash}\n` +
+                    `블록 번호: ${receipt.blockNumber}\n` +
+                    `가스 사용량: ${receipt.gasUsed.toString()}\n\n` +
+                    `판매 수익이 Admin 지갑으로 전송되었습니다.\n\n` +
+                    `탐색기: https://sepolia.basescan.org/tx/${receipt.transactionHash}`;
+
+                displayResult(result, 'success');
+
+            } catch (error) {
+                console.error('withdrawFunds error:', error);
+                let errorMessage = '❌ withdrawFunds() 실행 실패!\n\n';
+                if (error.code === 4001) {
+                    errorMessage += '사용자가 트랜잭션을 거부했습니다.';
+                } else if (error.message && error.message.includes('Sale must be settled first')) {
+                    errorMessage += '먼저 settleSale()을 실행해야 합니다.';
+                } else if (error.message && error.message.includes('No revenue available')) {
+                    errorMessage += '인출 가능한 수익이 없습니다.';
+                } else if (error.message && error.message.includes('Only admin')) {
+                    errorMessage += 'Admin 권한이 필요합니다.';
+                } else if (error.message) {
+                    errorMessage += `오류: ${error.message}`;
+                }
+                displayResult(errorMessage, 'error');
+            }
+        });
+
+        // reset Button Handler
+        document.getElementById('resetBtn').addEventListener('click', async () => {
+            const confirmed = confirm('⚠️ 경고: 컨트랙트를 초기화하면 모든 예약 데이터가 삭제됩니다.\n정말 실행하시겠습니까?');
+            
+            if (!confirmed) {
+                displayResult('ℹ️ 초기화가 취소되었습니다.', 'info');
+                return;
+            }
+
+            try {
+                displayResult('🔄 MetaMask 연결 중...', 'warning');
+
+                if (typeof window.ethereum === 'undefined') {
+                    displayResult('❌ MetaMask를 설치해주세요!', 'error');
+                    return;
+                }
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                displayResult(`🔄 연결됨: ${userAddress}\n네트워크 확인 중...`, 'warning');
+                await switchToBaseSepolia();
+
+                displayResult(`🔄 reset() 실행 중...\n\nMetaMask에서 트랜잭션을 승인해주세요...`, 'warning');
+
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                const tx = await contract.reset();
+
+                displayResult(`🔄 트랜잭션 전송됨!\n\nHash: ${tx.hash}\n확인 대기 중...`, 'warning');
+
+                const receipt = await tx.wait();
+
+                const result = `✅ reset() 실행 성공!\n\n` +
+                    `트랜잭션 해시: ${receipt.transactionHash}\n` +
+                    `블록 번호: ${receipt.blockNumber}\n` +
+                    `가스 사용량: ${receipt.gasUsed.toString()}\n\n` +
+                    `컨트랙트가 초기 상태로 리셋되었습니다.\n` +
+                    `모든 예약 데이터가 삭제되고 남은 USDC가 Admin에게 전송되었습니다.\n\n` +
+                    `탐색기: https://sepolia.basescan.org/tx/${receipt.transactionHash}`;
+
+                displayResult(result, 'success');
+
+                // Clear sale info display
+                document.getElementById('saleInfoDisplay').style.display = 'none';
+
+            } catch (error) {
+                console.error('reset error:', error);
+                let errorMessage = '❌ reset() 실행 실패!\n\n';
+                if (error.code === 4001) {
+                    errorMessage += '사용자가 트랜잭션을 거부했습니다.';
+                } else if (error.message && error.message.includes('Only admin')) {
+                    errorMessage += 'Admin 권한이 필요합니다.';
+                } else if (error.message) {
+                    errorMessage += `오류: ${error.message}`;
+                }
+                displayResult(errorMessage, 'error');
+            }
+        });
+
+        // Page load - check if MetaMask is installed
+        window.addEventListener('load', () => {
+            if (typeof window.ethereum === 'undefined') {
+                displayResult('⚠️ MetaMask가 설치되어 있지 않습니다.\n\n스마트 컨트랙트와 통신하려면 MetaMask를 설치해주세요.', 'warning');
+            }
+        });
+    </script>
+
+</body>
+</html>
+
