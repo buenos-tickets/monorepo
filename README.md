@@ -27,3 +27,6 @@ sequenceDiagram
     Contract->>Seller: Send the fund
   end
 ```
+
+## AI
+- Please take a look at [AI_USAGE.md]](https://github.com/buenos-tickets/monorepo/blob/main/AI_USAGE.md)
