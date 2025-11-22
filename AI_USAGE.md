@@ -20,7 +20,7 @@ This file documents the use of AI tools during the project development process.
 
 ---
 
-## Contract
+## Smart Contracts
 
 ### [2025-11-22] 
 - **File**: `contracts/BuenosTickets/contracts/BuenosTickets.sol` and other Solidity files
