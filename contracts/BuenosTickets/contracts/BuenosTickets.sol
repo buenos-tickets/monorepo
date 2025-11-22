@@ -2,16 +2,20 @@
 pragma solidity ^0.8.0;
 
 import "./MockUSDC.sol";
+import { IEntropyConsumer } from "@pythnetwork/entropy-sdk-solidity/IEntropyConsumer.sol";
+import { IEntropyV2 } from "@pythnetwork/entropy-sdk-solidity/IEntropyV2.sol";
 
 // Main Ticket Sale Contract
-contract BuenosTickets {
+contract BuenosTickets is IEntropyConsumer{
     address public admin;
     IERC20 public usdcToken; // Address of the actual USDC token contract
+    IEntropyV2 entropy;
 
     uint256 public endBlock; // Block number when the sale stops accepting reservations
     uint256 public ticketPrice; // Price of one ticket in USDC (e.g., 1e6 for 1 USDC)
     uint256 public maxTickets; // Total tickets available for sale
     uint256 public totalReserved; // Total number of unique reservations made
+    uint64 sequenceNumber;
 
     // Reservation status states
     enum Status { Unreserved, Reserved, Selected, Refunded }
@@ -61,10 +65,12 @@ contract BuenosTickets {
     /**
      * @notice Constructor sets the admin and the USDC token address.
      * @param _usdcTokenAddress The address of the deployed USDC (or MockUSDC) contract.
+     * @param _entropyAddress The address of the Pyth Network random number provider contract.
      */
-    constructor(address _usdcTokenAddress) {
+    constructor(address _usdcTokenAddress, address _entropyAddress) {
         admin = msg.sender;
         usdcToken = IERC20(_usdcTokenAddress);
+        entropy = IEntropyV2(_entropyAddress);
         // Ensure initial status for any address is Unreserved
         // by mapping(address => Reservation) default value
     }
@@ -125,19 +131,57 @@ contract BuenosTickets {
 
         // Determine the number of winners (Min of reserved users or max available tickets)
         uint256 winners = totalReserved < maxTickets ? totalReserved : maxTickets;
+        if (totalReserved < maxTickets) {
+            // 1. Select Winners (FCFS based on reservationOrder)
+            for (uint256 i = 0; i < totalReserved; i++) {
+                address user = reservationOrder[i];
+                Reservation storage res = reservations[user];
 
-        // 1. Select Winners (FCFS based on reservationOrder)
-        for (uint256 i = 0; i < totalReserved; i++) {
-            address user = reservationOrder[i];
-            Reservation storage res = reservations[user];
-
-            if (i < winners) {
-                // FCFS Winner
                 res.status = Status.Selected;
                 soldTickets++;
             }
-            // Users with index >= winners are rejected. Their status remains Status.Reserved,
-            // allowing them to call refund later.
+
+            uint256 totalRevenue = soldTickets * ticketPrice;
+
+            emit SaleSettled(soldTickets, totalRevenue);
+        } else {
+            uint256 fee = entropy.getFeeV2();
+            sequenceNumber = entropy.requestV2{ value: fee }();
+        }
+    }
+
+    // @param _sequenceNumber The sequence number of the request.
+    // @param _provider The address of the provider that generated the random number. If your app uses multiple providers, you can use this argument to distinguish which one is calling the app back.
+    // @param _randomNumber The generated random number.
+    // This method is called by the entropy contract when a random number is generated.
+    // This method **must** be implemented on the same contract that requested the random number.
+    // This method should **never** return an error -- if it returns an error, then the keeper will not be able to invoke the callback.
+    // If you are having problems receiving the callback, the most likely cause is that the callback is erroring.
+    // See the callback debugging guide here to identify the error https://docs.pyth.network/entropy/debug-callback-failures
+    function entropyCallback(
+        uint64 _sequenceNumber,
+        address _provider,
+        bytes32 _randomNumber
+    ) internal override {
+        require(sequenceNumber == _sequenceNumber, "TS: Invalid Pyth Entropy callback called");
+
+        address[] memory candidates = reservationOrder;
+        uint256 soldTickets = 0;
+
+        // shuffle
+        for (uint256 i = 0; i < maxTickets; i++) {
+            uint256 randomness = uint256(keccak256(abi.encodePacked(_randomNumber, i)));
+            uint256 swapIndex = i + (randomness % (maxTickets - i));
+            address temp = candidates[i];
+            candidates[i] = candidates[swapIndex];
+            candidates[swapIndex] = temp;
+        }
+
+        for (uint256 i = 0; i < maxTickets; i++) {
+            address user = candidates[i];
+            Reservation storage res = reservations[user];
+            res.status = Status.Selected;
+            soldTickets++;
         }
 
         uint256 totalRevenue = soldTickets * ticketPrice;
