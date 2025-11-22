@@ -16,6 +16,7 @@ contract BuenosTickets is IEntropyConsumer{
     uint256 public maxTickets; // Total tickets available for sale
     uint256 public totalReserved; // Total number of unique reservations made
     uint64 sequenceNumber;
+    bytes32 randomNumber;
 
     // Reservation status states
     enum Status { Unreserved, Reserved, Selected, Refunded }
@@ -165,12 +166,20 @@ contract BuenosTickets is IEntropyConsumer{
     ) internal override {
         require(sequenceNumber == _sequenceNumber, "TS: Invalid Pyth Entropy callback called");
 
+        randomNumber = _randomNumber;
+    }
+
+    /**
+     * @notice Select winners by using Pyth Network Entropy.
+     * This function can only be called after the `entropyCallback`.
+     */
+    function spinWheel() external onlyAdmin saleClosed {
         address[] memory candidates = reservationOrder;
         uint256 soldTickets = 0;
 
         // shuffle
         for (uint256 i = 0; i < maxTickets; i++) {
-            uint256 randomness = uint256(keccak256(abi.encodePacked(_randomNumber, i)));
+            uint256 randomness = uint256(keccak256(abi.encodePacked(randomNumber, i)));
             uint256 swapIndex = i + (randomness % (maxTickets - i));
             address temp = candidates[i];
             candidates[i] = candidates[swapIndex];
@@ -187,6 +196,10 @@ contract BuenosTickets is IEntropyConsumer{
         uint256 totalRevenue = soldTickets * ticketPrice;
 
         emit SaleSettled(soldTickets, totalRevenue);
+    }
+
+    function getEntropy() internal view override returns (address) {
+        return address(entropy);
     }
 
     // --- 5. Users and Admin actions after settlement ---
@@ -294,6 +307,8 @@ contract BuenosTickets is IEntropyConsumer{
         maxTickets = 0;
         totalReserved = 0;
         isSettled = false;
+        sequenceNumber = 0;
+        randomNumber = 0;
 
         emit ContractReset(contractBalance);
     }
