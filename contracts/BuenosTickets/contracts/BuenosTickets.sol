@@ -127,7 +127,6 @@ contract BuenosTickets is IEntropyConsumer{
      * This function can only be called after the endBlock.
      */
     function settleSale() external onlyAdmin saleClosed {
-        isSettled = true;
         uint256 soldTickets = 0;
 
         if (totalReserved < maxTickets) {
@@ -142,6 +141,7 @@ contract BuenosTickets is IEntropyConsumer{
 
             uint256 totalRevenue = soldTickets * ticketPrice;
 
+            isSettled = true;
             emit SaleSettled(soldTickets, totalRevenue);
         } else {
             // Lottery: Request random number from Pyth Network
@@ -194,6 +194,7 @@ contract BuenosTickets is IEntropyConsumer{
 
         uint256 totalRevenue = soldTickets * ticketPrice;
 
+        isSettled = true;
         emit SaleSettled(soldTickets, totalRevenue);
     }
 
