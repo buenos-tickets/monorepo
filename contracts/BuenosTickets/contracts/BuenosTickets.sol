@@ -72,21 +72,21 @@ contract BuenosTickets {
     // --- 1. Setup a ticket sale (Admin) ---
     /**
      * @notice Admin sets up the parameters for the ticket sale.
-     * @param _endBlock The block number when the sales ends.
+     * @param _duration The number of blocks from now until the sale ends (e.g., 100 for 100 blocks).
      * @param _price The price of one ticket in USDC (e.g., 10000 for 0.01 USDC with 6 decimals).
      * @param _maxTickets The maximum number of tickets available for sale.
      */
-    function setupSale(uint256 _endBlock, uint256 _price, uint256 _maxTickets) external onlyAdmin {
+    function setupSale(uint256 _duration, uint256 _price, uint256 _maxTickets) external onlyAdmin {
         require(endBlock == 0, "TS: Sale already set up");
         require(_maxTickets > 0, "TS: Max tickets must be positive");
         require(_price > 0, "TS: Ticket price must be positive");
-        require(_endBlock > block.number, "TS: End block must be in the future");
+        require(_duration > 0, "TS: Duration must be positive");
 
-        endBlock = _endBlock;
+        endBlock = block.number + _duration;
         ticketPrice = _price;
         maxTickets = _maxTickets;
 
-        emit SaleSetup(_endBlock, _price, _maxTickets);
+        emit SaleSetup(_duration, _price, _maxTickets);
     }
 
     // --- 2. User can reserve a ticket ---

@@ -12,13 +12,12 @@ contract BuenosTicketsStatusTest {
     address public user1 = address(0x1);
     uint256 public ticketPrice = 1000000; // 1 USDC (6 decimals)
     uint256 public maxTickets = 2;
-    uint256 public endBlock;
+    uint256 public duration = 100; // 100 blocks
 
     function setUp() public {
         admin = address(this);
         mockUSDC = new MockUSDC();
         ticketSale = new BuenosTickets(address(mockUSDC));
-        endBlock = block.number + 100;
     }
 
     // === Status Check Tests ===
@@ -31,7 +30,7 @@ contract BuenosTicketsStatusTest {
     }
     
     function test_GetUserStatusAfterReservation() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         mockUSDC.approve(address(ticketSale), ticketPrice);
         ticketSale.reserveTicket();
@@ -45,7 +44,8 @@ contract BuenosTicketsStatusTest {
     // === Getter Function Tests ===
     
     function test_GetSaleInfo() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        uint256 expectedEndBlock = block.number + duration;
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         (
             uint256 _endBlock,
@@ -55,7 +55,7 @@ contract BuenosTicketsStatusTest {
             bool _isSettled
         ) = ticketSale.getSaleInfo();
         
-        require(_endBlock == endBlock, "getSaleInfo endBlock mismatch");
+        require(_endBlock == expectedEndBlock, "getSaleInfo endBlock mismatch");
         require(_ticketPrice == ticketPrice, "getSaleInfo ticketPrice mismatch");
         require(_maxTickets == maxTickets, "getSaleInfo maxTickets mismatch");
         require(_totalReserved == 0, "getSaleInfo totalReserved should be 0");
@@ -63,7 +63,8 @@ contract BuenosTicketsStatusTest {
     }
     
     function test_GetSaleInfoAfterReservation() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        uint256 expectedEndBlock = block.number + duration;
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         mockUSDC.approve(address(ticketSale), ticketPrice);
         ticketSale.reserveTicket();
@@ -76,7 +77,7 @@ contract BuenosTicketsStatusTest {
             bool _isSettled
         ) = ticketSale.getSaleInfo();
         
-        require(_endBlock == endBlock, "getSaleInfo endBlock should match");
+        require(_endBlock == expectedEndBlock, "getSaleInfo endBlock should match");
         require(_ticketPrice == ticketPrice, "getSaleInfo ticketPrice should match");
         require(_maxTickets == maxTickets, "getSaleInfo maxTickets should match");
         require(_totalReserved == 1, "getSaleInfo should show 1 reservation");
@@ -101,7 +102,8 @@ contract BuenosTicketsStatusTest {
     }
     
     function test_GetSaleInfoWithMultipleReservations() public {
-        ticketSale.setupSale(endBlock, ticketPrice, 5);
+        uint256 expectedEndBlock = block.number + duration;
+        ticketSale.setupSale(duration, ticketPrice, 5);
         
         // Make multiple reservations
         mockUSDC.approve(address(ticketSale), ticketPrice);
@@ -115,7 +117,7 @@ contract BuenosTicketsStatusTest {
             bool _isSettled
         ) = ticketSale.getSaleInfo();
         
-        require(_endBlock == endBlock, "endBlock should match");
+        require(_endBlock == expectedEndBlock, "endBlock should match");
         require(_ticketPrice == ticketPrice, "ticketPrice should match");
         require(_maxTickets == 5, "maxTickets should be 5");
         require(_totalReserved == 1, "totalReserved should be 1");
@@ -123,10 +125,11 @@ contract BuenosTicketsStatusTest {
     }
     
     function test_PublicVariablesAccessible() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        uint256 expectedEndBlock = block.number + duration;
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         // Verify public variables can still be accessed directly
-        require(ticketSale.endBlock() == endBlock, "Public endBlock should be accessible");
+        require(ticketSale.endBlock() == expectedEndBlock, "Public endBlock should be accessible");
         require(ticketSale.ticketPrice() == ticketPrice, "Public ticketPrice should be accessible");
         require(ticketSale.maxTickets() == maxTickets, "Public maxTickets should be accessible");
         require(ticketSale.totalReserved() == 0, "Public totalReserved should be accessible");

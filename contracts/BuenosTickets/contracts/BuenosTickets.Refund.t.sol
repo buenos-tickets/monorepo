@@ -11,19 +11,18 @@ contract BuenosTicketsRefundTest {
     address public admin;
     uint256 public ticketPrice = 1000000; // 1 USDC (6 decimals)
     uint256 public maxTickets = 2;
-    uint256 public endBlock;
+    uint256 public duration = 100; // 100 blocks
 
     function setUp() public {
         admin = address(this);
         mockUSDC = new MockUSDC();
         ticketSale = new BuenosTickets(address(mockUSDC));
-        endBlock = block.number + 100;
     }
 
     // === Refund Tests ===
     
     function test_RefundBeforeSettlement() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         mockUSDC.approve(address(ticketSale), ticketPrice);
         ticketSale.reserveTicket();
@@ -39,7 +38,7 @@ contract BuenosTicketsRefundTest {
     }
     
     function test_RefundNoReservation() public {
-        ticketSale.setupSale(block.number + 1, ticketPrice, maxTickets);
+        ticketSale.setupSale(1, ticketPrice, maxTickets);
         
         // Note: Would need block mining and settlement to test properly
     }

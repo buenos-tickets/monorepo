@@ -11,19 +11,18 @@ contract BuenosTicketsReserveTest {
     address public admin;
     uint256 public ticketPrice = 1000000; // 1 USDC (6 decimals)
     uint256 public maxTickets = 2;
-    uint256 public endBlock;
+    uint256 public duration = 100; // 100 blocks
 
     function setUp() public {
         admin = address(this);
         mockUSDC = new MockUSDC();
         ticketSale = new BuenosTickets(address(mockUSDC));
-        endBlock = block.number + 100;
     }
 
     // === Reserve Ticket Tests ===
     
     function test_ReserveTicket() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         mockUSDC.approve(address(ticketSale), ticketPrice);
         ticketSale.reserveTicket();
@@ -49,7 +48,7 @@ contract BuenosTicketsReserveTest {
     }
     
     function test_ReserveTicketDoubleReservation() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         mockUSDC.approve(address(ticketSale), ticketPrice * 2);
         ticketSale.reserveTicket();
@@ -65,7 +64,7 @@ contract BuenosTicketsReserveTest {
     }
     
     function test_ReserveTicketWithoutApproval() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         try ticketSale.reserveTicket() {
             revert("Should have reverted");
@@ -78,7 +77,7 @@ contract BuenosTicketsReserveTest {
     }
     
     function test_MultipleReservations() public {
-        ticketSale.setupSale(endBlock, ticketPrice, 5);
+        ticketSale.setupSale(duration, ticketPrice, 5);
         
         mockUSDC.approve(address(ticketSale), ticketPrice);
         ticketSale.reserveTicket();
@@ -88,7 +87,7 @@ contract BuenosTicketsReserveTest {
     }
     
     function test_CheckReservationDetails() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         mockUSDC.approve(address(ticketSale), ticketPrice);
         ticketSale.reserveTicket();
@@ -99,7 +98,7 @@ contract BuenosTicketsReserveTest {
     }
     
     function test_ContractHoldsUSDC() public {
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         uint256 contractBalanceBefore = mockUSDC.balanceOf(address(ticketSale));
         

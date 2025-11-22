@@ -11,20 +11,19 @@ contract BuenosTicketsResetTest {
     address public admin;
     uint256 public ticketPrice = 1000000; // 1 USDC (6 decimals)
     uint256 public maxTickets = 2;
-    uint256 public endBlock;
+    uint256 public duration = 100; // 100 blocks
 
     function setUp() public {
         admin = address(this);
         mockUSDC = new MockUSDC();
         ticketSale = new BuenosTickets(address(mockUSDC));
-        endBlock = block.number + 100;
     }
 
     // === Reset Tests ===
     
     function test_Reset() public {
         // Setup and reserve a ticket
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         mockUSDC.approve(address(ticketSale), ticketPrice);
         ticketSale.reserveTicket();
         
@@ -64,13 +63,13 @@ contract BuenosTicketsResetTest {
         ticketSale.reset();
         
         // Verify can setup new sale after reset
-        ticketSale.setupSale(block.number + 100, ticketPrice * 2, maxTickets + 1);
+        ticketSale.setupSale(100, ticketPrice * 2, maxTickets + 1);
         require(ticketSale.ticketPrice() == ticketPrice * 2, "Should allow new setup after reset");
     }
     
     function test_ResetWithNoReservations() public {
         // Setup sale but no reservations
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         uint256 adminBalanceBefore = mockUSDC.balanceOf(admin);
         
@@ -83,7 +82,7 @@ contract BuenosTicketsResetTest {
     
     function test_ResetWithMultipleReservations() public {
         // Setup sale
-        ticketSale.setupSale(endBlock, ticketPrice, 5);
+        ticketSale.setupSale(duration, ticketPrice, 5);
         
         // Make multiple reservations
         mockUSDC.approve(address(ticketSale), ticketPrice);
@@ -107,7 +106,7 @@ contract BuenosTicketsResetTest {
     
     function test_ResetAllowsNewSale() public {
         // First sale
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         mockUSDC.approve(address(ticketSale), ticketPrice);
         ticketSale.reserveTicket();
         
@@ -115,13 +114,14 @@ contract BuenosTicketsResetTest {
         ticketSale.reset();
         
         // New sale with different parameters
-        uint256 newEndBlock = block.number + 200;
+        uint256 newDuration = 200;
         uint256 newPrice = ticketPrice * 3;
         uint256 newMaxTickets = maxTickets * 2;
+        uint256 expectedEndBlock = block.number + newDuration;
         
-        ticketSale.setupSale(newEndBlock, newPrice, newMaxTickets);
+        ticketSale.setupSale(newDuration, newPrice, newMaxTickets);
         
-        require(ticketSale.endBlock() == newEndBlock, "New end block set");
+        require(ticketSale.endBlock() == expectedEndBlock, "New end block set");
         require(ticketSale.ticketPrice() == newPrice, "New price set");
         require(ticketSale.maxTickets() == newMaxTickets, "New max tickets set");
         
@@ -134,7 +134,7 @@ contract BuenosTicketsResetTest {
     
     function test_ResetWithZeroBalance() public {
         // Setup sale but don't make any reservations
-        ticketSale.setupSale(endBlock, ticketPrice, maxTickets);
+        ticketSale.setupSale(duration, ticketPrice, maxTickets);
         
         uint256 contractBalance = mockUSDC.balanceOf(address(ticketSale));
         require(contractBalance == 0, "Contract should have 0 balance");
