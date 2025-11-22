@@ -203,6 +203,26 @@ contract BuenosTickets {
         return reservations[user].status;
     }
 
+    // --- 6. Read functions for sale configuration ---
+
+    /**
+     * @notice Get all sale configuration details at once.
+     * @return _endBlock The block number when the sale ends.
+     * @return _ticketPrice The price of one ticket in USDC.
+     * @return _maxTickets The maximum number of tickets available.
+     * @return _totalReserved The total number of reservations made.
+     * @return _isSettled Whether the sale has been settled.
+     */
+    function getSaleInfo() external view returns (
+        uint256 _endBlock,
+        uint256 _ticketPrice,
+        uint256 _maxTickets,
+        uint256 _totalReserved,
+        bool _isSettled
+    ) {
+        return (endBlock, ticketPrice, maxTickets, totalReserved, isSettled);
+    }
+
     /**
      * @notice Admin resets the contract to initial state and withdraws all remaining USDC.
      * This function withdraws all USDC held by the contract and resets all state variables.
