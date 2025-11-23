@@ -178,7 +178,11 @@ sequenceDiagram
 
 ## Screenshots
 
-<!-- Screenshots will be added here -->
+<img width="950" height="589" alt="screenshot1" src="https://github.com/user-attachments/assets/dfb67271-1a2b-4d14-8c29-95bb4b5cdb7f" />
+<img width="950" height="589" alt="screenshot2" src="https://github.com/user-attachments/assets/709d50f7-6380-4b9d-a8d2-942bfdf65d4e" />
+<img width="950" height="589" alt="screenshot3" src="https://github.com/user-attachments/assets/08072171-8a65-49ad-8095-4bea95babd76" />
+
+
 
 ## Future Work
 
