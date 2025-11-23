@@ -30,6 +30,10 @@
             margin: 5px 0;
             box-sizing: border-box;
         }
+        input[readonly] {
+            background-color: #f0f0f0;
+            color: #666;
+        }
         #transactionStatus {
             word-wrap: break-word;
             overflow-wrap: break-word;
@@ -42,94 +46,174 @@
 <body>
     <h1>Buenos Tickets - Customer (Pyth, x402 and Hardhat)</h1>
 
-    <!-- ==================== Section 1: Ticket Purchase ==================== -->
+    <!-- ==================== Section 1: Smart Contract Functions ==================== -->
     <div class="section">
-        <h2>🎫 Ticket Purchase</h2>
-        <p><strong>Description:</strong> Blah blah blah</p>
-        
-        <button id="payTicketBtn" style="
-            background-color: #4CAF50;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 10px;
-        ">
-            Pay Ticket
-        </button>
+        <h2>🔗 스마트 컨트랙트 함수 호출</h2>
+        <p><strong>설명:</strong> BuenosTickets 컨트랙트와 직접 통신합니다.</p>
 
-        <button id="payTicketWithoutX402Btn" style="
-            background-color: #2196F3;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            font-size: 16px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        ">
-            Pay Ticket without x402
-        </button>
-
-        <div style="display: flex; gap: 10px; margin-top: 20px;">
-            <button id="approveBtn" style="
-                background-color: #FF9800;
+        <div style="margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px; border-left: 4px solid #2196F3;">
+            <h3 style="margin-top: 0; color: #1976D2;">📍 환경 정보</h3>
+            <ul style="margin: 10px 0;">
+                <li><strong>Network:</strong> Base Sepolia (Chain ID: 84532)</li>
+                <li><strong>Smart Contract Address:</strong> <code style="background: white; padding: 2px 6px; border-radius: 3px;">0x55593D961274e6B08D0880fb10CE9E2E69F865c6</code></li>
+            </ul>
+            <button id="viewMyAddressBtn" style="
+                background-color: #1976D2;
                 color: white;
-                padding: 15px 32px;
-                text-align: center;
-                font-size: 16px;
+                padding: 10px 20px;
+                font-size: 14px;
                 border: none;
                 border-radius: 4px;
                 cursor: pointer;
-                flex: 1;
+                margin-top: 10px;
+                width: 100%;
             ">
-                Approve USDC
-            </button>
-
-            <button id="callMethodBtn" style="
-                background-color: #9C27B0;
-                color: white;
-                padding: 15px 32px;
-                text-align: center;
-                font-size: 16px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                flex: 1;
-            ">
-                Call reserveTicket()
+                🔍 Base Sepolia Explorer에서 내 주소 보기
             </button>
         </div>
 
-        <div id="transactionStatus" style="margin-top: 15px; padding: 10px; display: none;"></div>
+        <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
+            
+            <!-- getSaleInfo Button -->
+            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
+                <h4 style="margin-top: 0; color: #555;">📊 getSaleInfo()</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">판매 정보를 조회합니다 (읽기 전용)</p>
+                <button id="getSaleInfoBtn" style="
+                    background-color: #17a2b8;
+                    color: white;
+                    padding: 12px 24px;
+                    font-size: 14px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    width: 100%;
+                ">
+                    Get Sale Info
+                </button>
+            </div>
+
+            <!-- getUserStatus Button -->
+            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
+                <h4 style="margin-top: 0; color: #555;">👤 getUserStatus(address user)</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">사용자의 예약 상태를 조회합니다 (읽기 전용)</p>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <input type="text" id="userStatusAddress" placeholder="0x..." style="flex: 1; padding: 10px;" value="connected wallet" />
+                    <button id="getUserStatusBtn" style="
+                        background-color: #6c757d;
+                        color: white;
+                        padding: 12px 24px;
+                        font-size: 14px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        white-space: nowrap;
+                    ">
+                        Get Status
+                    </button>
+                </div>
+            </div>
+
+            <!-- refund Button -->
+            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
+                <h4 style="margin-top: 0; color: #555;">💸 refund()</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">당첨되지 않은 경우 환불을 받습니다 (트랜잭션 필요)</p>
+                <button id="refundBtn" style="
+                    background-color: #dc3545;
+                    color: white;
+                    padding: 12px 24px;
+                    font-size: 14px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    width: 100%;
+                ">
+                    Request Refund
+                </button>
+            </div>
+
+            <!-- Approve USDC & Reserve Ticket (2-step process in one row) -->
+            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #fff9e6; border-left: 4px solid #FF9800;">
+                <h4 style="margin-top: 0; color: #555;">🎫 티켓 예약 (2단계 프로세스)</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0 15px 0;">USDC 승인 후 티켓을 예약합니다</p>
+                <div style="display: flex; gap: 10px;">
+                    <div style="flex: 1;">
+                        <button id="approveBtn" style="
+                            background-color: #FF9800;
+                            color: white;
+                            padding: 12px 24px;
+                            font-size: 14px;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            width: 100%;
+                        ">
+                            1. Approve USDC
+                        </button>
+                    </div>
+                    <div style="flex: 1;">
+                        <button id="callMethodBtn" style="
+                            background-color: #9C27B0;
+                            color: white;
+                            padding: 12px 24px;
+                            font-size: 14px;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            width: 100%;
+                        ">
+                            2. Reserve Ticket
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="contractCallStatus" style="margin-top: 15px; padding: 15px; display: none; border-radius: 5px;"></div>
     </div>
 
     <!-- ==================== Section 2: Configuration ==================== -->
     <div class="section">
-        <h2>Configuration</h2>
-        <p><strong>Description:</strong> Basic settings for x402 payment. You can modify these values if needed.</p>
+        <h2>⚙️ Configuration</h2>
+        <p><strong>Description:</strong> Network and facilitator settings for x402 payment protocol. Pre-configured for Base Sepolia testnet.</p>
         
         <h3>RPC Node Information</h3>
         <ul>
-            <li>Chain ID : <input type="text" id="chainId" value="" /></li>
-            <li>RPC URL : <input type="text" id="rpcUrl" value="" /></li>
+            <li>Chain ID : <input type="text" id="chainId" value="84532" readonly /> <small>(Base Sepolia)</small></li>
+            <li>RPC URL : <input type="text" id="rpcUrl" value="https://sepolia.base.org" readonly /></li>
         </ul>
 
         <h3>BuenosTickets Smart Contract Address</h3>
         <ul>
-            <li>BuenosTickets Contract Address : <input type="text" id="contractAddress" value="" /></li>
+            <li>BuenosTickets Contract Address : <input type="text" id="contractAddress" value="0x55593D961274e6B08D0880fb10CE9E2E69F865c6" readonly /></li>
         </ul>
 
-        <h3>Facilitator Information</h3>
+        <h3>Facilitator Information (for x402 payment)</h3>
         <ul>
-            <li>Facilitator Address: <input type="text" id="facilitatorAddress" value="" /></li>
-            <li>Facilitator API Endpoint: <input type="text" id="facilitatorApiEndpoint" value="" /></li>
+            <li>Network: <input type="text" id="facilitatorNetwork" value="base-sepolia" readonly /> <small>(baseSepolia)</small></li>
+            <li>Facilitator URL: <input type="text" id="facilitatorApiEndpoint" value="http://localhost:3001/api/x402/submit" placeholder="http://localhost:3001/api/x402/submit" /></li>
+            <li>Resource Wallet Address: <input type="text" id="facilitatorAddress" value="0xEfA21bF6343748f95F6949f7aAa7DF88F0eE6992" placeholder="0x..." /></li>
+            <li>
+                <label style="display: flex; align-items: center; gap: 5px;">
+                    <input type="checkbox" id="testMode" style="width: auto;" />
+                    <span>Test Mode (Skip Facilitator, simulate response)</span>
+                </label>
+            </li>
         </ul>
+        <p style="font-size: 0.9em; color: #666;">
+            <strong>Note:</strong> Configure Facilitator settings to use "Pay Ticket (x402 - Gasless)" button. 
+            The Facilitator will pay gas fees on your behalf.
+        </p>
+        <p style="font-size: 0.85em; color: #999;">
+            <strong>Default Configuration:</strong><br>
+            • Network: Base Sepolia (ChainID: 84532)<br>
+            • Facilitator URL: http://localhost:3001 (run your own facilitator)<br>
+            • Resource Wallet: Your address (receives payments)<br>
+            • <strong>Test Mode:</strong> Enable to simulate x402 without real facilitator
+        </p>
+        <p style="font-size: 0.85em; color: #f39c12; background-color: #fff3cd; padding: 8px; border-radius: 4px;">
+            ⚠️ <strong>Quick Start:</strong> Check "Test Mode" to try x402 flow without setting up a facilitator server.
+        </p>
     </div>
 
     <!-- ==================== Section 3: Contract State Information ==================== -->
@@ -172,6 +256,44 @@
         </div>
     </div>
 
+    <!-- ==================== Section 5: Ticket Purchase ==================== -->
+    <div class="section">
+        <h2>🎫 Ticket Purchase</h2>
+        <p><strong>Description:</strong> Choose your payment method below. x402 allows gasless transactions through a Facilitator.</p>
+        <p style="font-size: 0.9em; color: #666;"><strong>💡 Tip:</strong> 개별 컨트랙트 함수 호출(Approve, Reserve)은 "🔗 스마트 컨트랙트 함수 호출" 섹션을 이용하세요.</p>
+        
+        <button id="payTicketBtn" style="
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        ">
+            Pay Ticket (x402 - Gasless)
+        </button>
+
+        <button id="payTicketWithoutX402Btn" style="
+            background-color: #2196F3;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            font-size: 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        ">
+            Direct USDC Transfer (You pay gas)
+        </button>
+
+        <div id="transactionStatus" style="margin-top: 15px; padding: 10px; display: none;"></div>
+    </div>
+
     <script>
         // Base Sepolia Network Configuration
         const BASE_SEPOLIA_CONFIG = {
@@ -189,8 +311,8 @@
         // USDC Contract on Base Sepolia
         const USDC_CONTRACT_ADDRESS = '0x036CbD53842c5426634e7929541eC2318f3dCF7e'; // Base Sepolia USDC
         
-        // BuenosTickets Contract Address (임시)
-        const BUENOS_TICKETS_CONTRACT_ADDRESS = '0x0000000000000000000000000000000000022222';
+        // BuenosTickets Contract Address
+        const BUENOS_TICKETS_CONTRACT_ADDRESS = '0x55593D961274e6B08D0880fb10CE9E2E69F865c6';
         
         const RECIPIENT_ADDRESS = '0xefa21bf6343748f95f6949f7aaa7df88f0ee6992';
         const AMOUNT = '0.001'; // USDC amount
@@ -214,7 +336,10 @@
             'function maxTickets() view returns (uint256)',
             'function totalReserved() view returns (uint256)',
             'function getUserStatus(address user) view returns (uint8)',
-            'function usdcToken() view returns (address)'
+            'function usdcToken() view returns (address)',
+            'function refund() external',
+            'function getSaleInfo() external view returns (uint256 _endBlock, uint256 _ticketPrice, uint256 _maxTickets, uint256 _totalReserved, bool _isSettled)',
+            'function isSettled() view returns (bool)'
         ];
 
         // Helper function to switch to Base Sepolia
@@ -242,9 +367,237 @@
             }
         }
 
+        // Pay Ticket (x402 flow) Button Handler
+        document.getElementById('payTicketBtn').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('transactionStatus');
+            
+            try {
+                if (typeof ethers === 'undefined') {
+                    alert('Error: ethers.js library not loaded.');
+                    return;
+                }
+
+                if (typeof window.ethereum === 'undefined') {
+                    alert('Please install MetaMask to use this feature!');
+                    return;
+                }
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
+
+                await switchToBaseSepolia();
+
+                // Get Facilitator configuration
+                const facilitatorNetwork = document.getElementById('facilitatorNetwork').value || 'base-sepolia';
+                const facilitatorEndpoint = document.getElementById('facilitatorApiEndpoint').value;
+                const facilitatorAddress = document.getElementById('facilitatorAddress').value;
+                const testMode = document.getElementById('testMode').checked;
+
+                if (!testMode) {
+                    if (!facilitatorEndpoint || facilitatorEndpoint.trim() === '') {
+                        statusDiv.style.backgroundColor = '#f8d7da';
+                        statusDiv.style.color = '#721c24';
+                        statusDiv.innerHTML = '❌ Please configure Facilitator API Endpoint in the Configuration section or enable Test Mode';
+                        return;
+                    }
+
+                    if (!facilitatorAddress || facilitatorAddress.trim() === '') {
+                        statusDiv.style.backgroundColor = '#f8d7da';
+                        statusDiv.style.color = '#721c24';
+                        statusDiv.innerHTML = '❌ Please configure Resource Wallet Address in the Configuration section';
+                        return;
+                    }
+                }
+
+                // Connect to BuenosTickets contract
+                const buenosTicketsContract = new ethers.Contract(
+                    BUENOS_TICKETS_CONTRACT_ADDRESS, 
+                    BUENOS_TICKETS_ABI, 
+                    provider
+                );
+
+                // Connect to USDC contract
+                const usdcContract = new ethers.Contract(USDC_CONTRACT_ADDRESS, ERC20_ABI, signer);
+
+                statusDiv.innerHTML = `🔄 Preparing payment data...`;
+
+                // Get ticket price (use fixed price for now)
+                const decimals = await usdcContract.decimals();
+                const symbol = await usdcContract.symbol();
+                const ticketPriceInUnits = ethers.utils.parseUnits(TICKET_PRICE, decimals);
+
+                // Create transaction data for reserveTicket()
+                const txData = buenosTicketsContract.interface.encodeFunctionData('reserveTicket');
+
+                // Prepare transaction object
+                const tx = {
+                    from: userAddress,
+                    to: BUENOS_TICKETS_CONTRACT_ADDRESS,
+                    data: txData,
+                    value: '0x0',
+                    chainId: parseInt(BASE_SEPOLIA_CONFIG.chainId, 16),
+                };
+
+                // Get current gas price and nonce
+                const gasPrice = await provider.getGasPrice();
+                const nonce = await provider.getTransactionCount(userAddress, 'latest');
+
+                tx.gasPrice = gasPrice.toHexString();
+                tx.nonce = nonce;
+                tx.gasLimit = ethers.utils.hexlify(100000); // Estimate
+
+                statusDiv.innerHTML = `🔄 Creating signed transaction...<br>Please sign in MetaMask (no gas required now)`;
+
+                // Sign the transaction (EIP-712 typed data)
+                // For x402, we create a payment request signature
+                const domain = {
+                    name: 'Buenos Tickets x402',
+                    version: '1',
+                    chainId: parseInt(BASE_SEPOLIA_CONFIG.chainId, 16),
+                    verifyingContract: BUENOS_TICKETS_CONTRACT_ADDRESS
+                };
+
+                const types = {
+                    PaymentRequest: [
+                        { name: 'from', type: 'address' },
+                        { name: 'to', type: 'address' },
+                        { name: 'value', type: 'uint256' },
+                        { name: 'data', type: 'bytes' },
+                        { name: 'nonce', type: 'uint256' },
+                        { name: 'deadline', type: 'uint256' }
+                    ]
+                };
+
+                const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
+
+                const value = {
+                    from: userAddress,
+                    to: BUENOS_TICKETS_CONTRACT_ADDRESS,
+                    value: 0,
+                    data: txData,
+                    nonce: nonce,
+                    deadline: deadline
+                };
+
+                // Sign typed data
+                const signature = await signer._signTypedData(domain, types, value);
+
+                // Prepare payload for facilitator
+                const payload = {
+                    type: 'x402-payment',
+                    network: facilitatorNetwork,
+                    chainId: parseInt(BASE_SEPOLIA_CONFIG.chainId, 16),
+                    transaction: tx,
+                    signature: signature,
+                    signedData: {
+                        domain,
+                        types,
+                        value
+                    },
+                    payment: {
+                        amount: TICKET_PRICE,
+                        currency: symbol,
+                        description: 'Buenos Tickets - Tango Event',
+                        from: userAddress,
+                        to: facilitatorAddress
+                    }
+                };
+
+                let facilitatorResult;
+
+                if (testMode) {
+                    // Test mode: Simulate facilitator response
+                    statusDiv.innerHTML = `🔄 TEST MODE: Simulating facilitator response...<br>No actual transaction will be sent`;
+                    
+                    console.log('🧪 TEST MODE ENABLED');
+                    console.log('📦 Payload that would be sent:', payload);
+                    
+                    await new Promise(resolve => setTimeout(resolve, 2000));
+                    
+                    facilitatorResult = {
+                        success: true,
+                        txHash: '0x' + '0'.repeat(64), // Mock transaction hash
+                        message: 'Test mode: Transaction simulated',
+                        timestamp: Date.now()
+                    };
+                    
+                    console.log('✅ Simulated response:', facilitatorResult);
+
+                } else {
+                    // Real mode: Send to actual facilitator
+                    statusDiv.innerHTML = `🔄 Sending payment request to Facilitator...<br>Facilitator will broadcast the transaction`;
+                    
+                    console.log('📤 Sending to facilitator:', facilitatorEndpoint);
+                    console.log('📦 Payload:', payload);
+                    
+                    const facilitatorResponse = await fetch(facilitatorEndpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(payload)
+                    }).catch(fetchError => {
+                        console.error('❌ Fetch error:', fetchError);
+                        throw new Error(`Cannot connect to Facilitator. Please check:\n1. Facilitator URL is correct\n2. Facilitator service is running\n3. CORS is properly configured\n\nError: ${fetchError.message}`);
+                    });
+
+                    if (!facilitatorResponse.ok) {
+                        const errorText = await facilitatorResponse.text();
+                        console.error('❌ Facilitator response error:', errorText);
+                        throw new Error(`Facilitator error: ${facilitatorResponse.status} ${facilitatorResponse.statusText}\nDetails: ${errorText}`);
+                    }
+
+                    facilitatorResult = await facilitatorResponse.json();
+                    console.log('✅ Facilitator response:', facilitatorResult);
+                }
+
+                statusDiv.innerHTML = `🔄 ${testMode ? 'Simulated' : 'Facilitator'} processing...<br>Transaction hash: ${facilitatorResult.txHash || 'pending'}`;
+
+                // Wait a bit for confirmation
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                statusDiv.style.backgroundColor = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.innerHTML = `✅ Payment ${testMode ? 'simulated' : 'submitted'} via x402!<br>
+                    ${testMode ? '<strong>⚠️ TEST MODE - No real transaction</strong><br>' : ''}
+                    Transaction: ${facilitatorResult.txHash ? `<a href="https://sepolia.basescan.org/tx/${facilitatorResult.txHash}" target="_blank" style="color: #155724;">${facilitatorResult.txHash.substring(0, 20)}...</a>` : 'Processing'}<br>
+                    ${testMode ? '' : `Facilitator: ${facilitatorAddress}<br>`}
+                    Amount: ${TICKET_PRICE} ${symbol}<br>
+                    <small>${testMode ? 'Test mode enabled - Check console for details' : 'Facilitator pays gas fees on your behalf'}</small>`;
+
+            } catch (error) {
+                console.error('x402 Payment error:', error);
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                
+                let errorMessage = 'x402 Payment failed!';
+                if (error.code === 4001) {
+                    errorMessage = '❌ Signature rejected by user';
+                } else if (error.message && error.message.includes('Facilitator')) {
+                    errorMessage = `❌ Facilitator error: ${error.message}`;
+                } else if (error.message && error.message.includes('network')) {
+                    errorMessage = '❌ Network error: Check Facilitator endpoint';
+                } else {
+                    errorMessage = `❌ Error: ${error.message}`;
+                }
+                
+                statusDiv.innerHTML = errorMessage;
+            }
+        });
+
         // Approve Button Handler
         document.getElementById('approveBtn').addEventListener('click', async () => {
-            const statusDiv = document.getElementById('transactionStatus');
+            const statusDiv = document.getElementById('contractCallStatus');
             
             try {
                 if (typeof ethers === 'undefined') {
@@ -317,7 +670,7 @@
 
         // Call reserveTicket() Button Handler
         document.getElementById('callMethodBtn').addEventListener('click', async () => {
-            const statusDiv = document.getElementById('transactionStatus');
+            const statusDiv = document.getElementById('contractCallStatus');
             
             try {
                 if (typeof ethers === 'undefined') {
@@ -469,6 +822,284 @@
                     errorMessage = '❌ Insufficient USDC balance or ETH for gas';
                 } else {
                     errorMessage = `❌ Error: ${error.message}`;
+                }
+                
+                statusDiv.innerHTML = errorMessage;
+            }
+        });
+
+        // ==================== New Smart Contract Function Handlers ====================
+        
+        // Helper function for status display
+        function getStatusText(statusCode) {
+            const statuses = ['Unreserved', 'Reserved', 'Selected', 'Refunded'];
+            return statuses[statusCode] || 'Unknown';
+        }
+
+        // View My Address in Explorer Button Handler
+        document.getElementById('viewMyAddressBtn').addEventListener('click', async () => {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('메타마스크를 설치해주세요!');
+                    return;
+                }
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                // Open Base Sepolia explorer in new tab
+                const explorerUrl = `https://sepolia.basescan.org/address/${userAddress}`;
+                window.open(explorerUrl, '_blank');
+
+            } catch (error) {
+                console.error('View address error:', error);
+                if (error.code === 4001) {
+                    alert('❌ 메타마스크 연결이 거부되었습니다');
+                } else {
+                    alert(`❌ 에러: ${error.message}`);
+                }
+            }
+        });
+
+        // getSaleInfo Button Handler
+        document.getElementById('getSaleInfoBtn').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('contractCallStatus');
+            
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('메타마스크를 설치해주세요!');
+                    return;
+                }
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.innerHTML = '🔄 컨트랙트 연결 중...';
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await switchToBaseSepolia();
+
+                // Connect to BuenosTickets contract (read-only)
+                const contract = new ethers.Contract(
+                    BUENOS_TICKETS_CONTRACT_ADDRESS, 
+                    BUENOS_TICKETS_ABI, 
+                    provider
+                );
+
+                statusDiv.innerHTML = '🔄 getSaleInfo() 호출 중...';
+
+                const saleInfo = await contract.getSaleInfo();
+                
+                statusDiv.style.backgroundColor = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.innerHTML = `✅ 판매 정보 조회 성공!<br><br>
+                    <strong>📊 Sale Information:</strong><br>
+                    • <strong>End Block:</strong> ${saleInfo._endBlock.toString()}<br>
+                    • <strong>Ticket Price:</strong> ${ethers.utils.formatUnits(saleInfo._ticketPrice, 6)} USDC<br>
+                    • <strong>Max Tickets:</strong> ${saleInfo._maxTickets.toString()}<br>
+                    • <strong>Total Reserved:</strong> ${saleInfo._totalReserved.toString()}<br>
+                    • <strong>Is Settled:</strong> ${saleInfo._isSettled ? 'Yes ✅' : 'No ❌'}`;
+
+            } catch (error) {
+                console.error('getSaleInfo error:', error);
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                statusDiv.innerHTML = `❌ 에러: ${error.message}`;
+            }
+        });
+
+        // getUserStatus Button Handler
+        document.getElementById('getUserStatusBtn').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('contractCallStatus');
+            const addressInput = document.getElementById('userStatusAddress').value.trim();
+            
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('메타마스크를 설치해주세요!');
+                    return;
+                }
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.innerHTML = '🔄 컨트랙트 연결 중...';
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                await switchToBaseSepolia();
+
+                // Determine which address to query
+                let queryAddress = addressInput;
+                if (!queryAddress || queryAddress === 'connected wallet') {
+                    queryAddress = userAddress;
+                    document.getElementById('userStatusAddress').value = userAddress;
+                }
+
+                // Validate address
+                if (!ethers.utils.isAddress(queryAddress)) {
+                    throw new Error('유효하지 않은 주소입니다');
+                }
+
+                // Connect to BuenosTickets contract (read-only)
+                const contract = new ethers.Contract(
+                    BUENOS_TICKETS_CONTRACT_ADDRESS, 
+                    BUENOS_TICKETS_ABI, 
+                    provider
+                );
+
+                statusDiv.innerHTML = `🔄 getUserStatus(${queryAddress.substring(0, 10)}...) 호출 중...`;
+
+                const status = await contract.getUserStatus(queryAddress);
+                const statusText = getStatusText(status);
+                
+                // Status color coding
+                let statusEmoji = '❓';
+                let statusColor = '#666';
+                if (status === 0) { statusEmoji = '⚪'; statusColor = '#6c757d'; } // Unreserved
+                else if (status === 1) { statusEmoji = '🟡'; statusColor = '#ffc107'; } // Reserved
+                else if (status === 2) { statusEmoji = '🟢'; statusColor = '#28a745'; } // Selected
+                else if (status === 3) { statusEmoji = '🔴'; statusColor = '#dc3545'; } // Refunded
+
+                statusDiv.style.backgroundColor = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.innerHTML = `✅ 사용자 상태 조회 성공!<br><br>
+                    <strong>👤 User Status:</strong><br>
+                    • <strong>Address:</strong> ${queryAddress}<br>
+                    • <strong>Status:</strong> <span style="color: ${statusColor}; font-weight: bold;">${statusEmoji} ${statusText} (${status})</span><br><br>
+                    <small>
+                        <strong>Status 설명:</strong><br>
+                        0 = Unreserved (예약 안함) ⚪<br>
+                        1 = Reserved (예약됨, 추첨 대기) 🟡<br>
+                        2 = Selected (당첨!) 🟢<br>
+                        3 = Refunded (환불 완료) 🔴
+                    </small>`;
+
+            } catch (error) {
+                console.error('getUserStatus error:', error);
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                statusDiv.innerHTML = `❌ 에러: ${error.message}`;
+            }
+        });
+
+        // refund Button Handler
+        document.getElementById('refundBtn').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('contractCallStatus');
+            
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('메타마스크를 설치해주세요!');
+                    return;
+                }
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+
+                await switchToBaseSepolia();
+
+                // Connect to BuenosTickets contract
+                const contract = new ethers.Contract(
+                    BUENOS_TICKETS_CONTRACT_ADDRESS, 
+                    BUENOS_TICKETS_ABI, 
+                    signer
+                );
+
+                // 사전 체크 1: 추첨 완료 여부 확인
+                statusDiv.innerHTML = '🔄 컨트랙트 상태 확인 중...';
+                const isSettled = await contract.isSettled();
+                
+                if (!isSettled) {
+                    statusDiv.style.backgroundColor = '#fff3cd';
+                    statusDiv.style.color = '#856404';
+                    statusDiv.innerHTML = `⚠️ <strong>환불 불가</strong><br><br>
+                        추첨이 아직 진행되지 않았습니다.<br>
+                        추첨 완료 후 환불이 가능합니다.<br><br>
+                        <small>💡 <strong>Tip:</strong> "Get Sale Info" 버튼으로 현재 상태를 확인하세요.<br>
+                        Is Settled가 "Yes"로 변경되면 환불을 요청할 수 있습니다.</small>`;
+                    return;
+                }
+
+                // 사전 체크 2: 사용자의 예약 상태 확인
+                statusDiv.innerHTML = '🔄 사용자 예약 상태 확인 중...';
+                const userStatus = await contract.getUserStatus(userAddress);
+                
+                if (userStatus === 0) {
+                    statusDiv.style.backgroundColor = '#fff3cd';
+                    statusDiv.style.color = '#856404';
+                    statusDiv.innerHTML = `⚠️ <strong>환불 불가</strong><br><br>
+                        예약 내역이 없습니다.<br>
+                        환불을 받으려면 먼저 티켓을 예약해야 합니다.`;
+                    return;
+                }
+
+                if (userStatus === 2) {
+                    statusDiv.style.backgroundColor = '#d1ecf1';
+                    statusDiv.style.color = '#0c5460';
+                    statusDiv.innerHTML = `🎉 <strong>축하합니다!</strong><br><br>
+                        당첨되었습니다!<br>
+                        당첨자는 환불을 받을 수 없습니다.<br><br>
+                        <small>💡 티켓 구매가 확정되었습니다.</small>`;
+                    return;
+                }
+
+                if (userStatus === 3) {
+                    statusDiv.style.backgroundColor = '#d4edda';
+                    statusDiv.style.color = '#155724';
+                    statusDiv.innerHTML = `✅ 이미 환불을 받았습니다.<br><br>
+                        중복 환불은 불가능합니다.`;
+                    return;
+                }
+
+                // 사전 체크 통과 - 이제 MetaMask 팝업이 뜹니다
+                statusDiv.innerHTML = '🔄 refund() 호출 중...<br><strong>메타마스크에서 확인해주세요</strong>';
+
+                // Call refund()
+                const tx = await contract.refund();
+                
+                statusDiv.innerHTML = `🔄 트랜잭션 제출됨!<br>Hash: ${tx.hash}<br>확인 대기 중...`;
+
+                const receipt = await tx.wait();
+
+                statusDiv.style.backgroundColor = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.innerHTML = `✅ 환불 성공!<br>
+                    Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
+                    Block: ${receipt.blockNumber}<br>
+                    <small>환불이 완료되었습니다. USDC가 귀하의 지갑으로 반환되었습니다.</small>`;
+
+            } catch (error) {
+                console.error('refund error:', error);
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                
+                let errorMessage = '환불 실패!';
+                if (error.code === 4001) {
+                    errorMessage = '❌ 사용자가 트랜잭션을 거부했습니다';
+                } else if (error.message && error.message.includes('No active reservation')) {
+                    errorMessage = '❌ 예약 내역이 없습니다';
+                } else if (error.message && error.message.includes('User was either selected or already refunded')) {
+                    errorMessage = '❌ 이미 당첨되었거나 환불을 받았습니다';
+                } else if (error.message && error.message.includes('Sale must be settled first')) {
+                    errorMessage = '❌ 추첨이 아직 진행되지 않았습니다. 추첨 완료 후 환불 가능합니다.';
+                } else {
+                    errorMessage = `❌ 에러: ${error.message}`;
                 }
                 
                 statusDiv.innerHTML = errorMessage;
