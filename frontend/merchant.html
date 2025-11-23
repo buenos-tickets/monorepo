@@ -531,7 +531,7 @@
                 statusDiv.innerHTML = '🔄 Calling settleSale()...<br><strong>Please confirm in MetaMask</strong>';
 
                 const v2_contract = new ethers.Contract(V2_CONTRACT_ADDRESS, V2_CONTRACT_ABI, provider);
-                const v2_value = await contract.getFeeV2();
+                const v2_value = await v2_contract.getFeeV2();
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 const tx = await contract.settleSale({ value: v2_value, gasLimit: 200000n });
 
