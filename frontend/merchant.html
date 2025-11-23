@@ -202,17 +202,19 @@
 <body>
     <h1>🎭 Buenos Tickets - Merchant Admin Panel</h1>
 
-    <!-- 스마트 컨트랙트 함수 호출 섹션 -->
+    <!-- Smart Contract Functions Section -->
     <div class="section">
-        <h2>🔗 스마트 컨트랙트 함수 호출</h2>
-        <p><strong>설명:</strong> BuenosTickets 컨트랙트의 Admin 함수들을 호출합니다.</p>
+        <h2>🔗 Smart Contract Functions</h2>
+        <p><strong>Description:</strong> Call BuenosTickets contract Admin functions.</p>
+
+        <div id="contractCallStatus" style="margin-bottom: 20px; padding: 15px; display: none; border-radius: 5px;"></div>
 
         <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
             
             <!-- getSaleInfo Button -->
             <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #17a2b8;">
                 <h4 style="margin-top: 0; color: #555;">📊 getSaleInfo()</h4>
-                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">현재 판매 설정 및 상태 정보를 조회합니다 (읽기 전용)</p>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Query current sale settings and status (Read-only)</p>
                 <button id="getSaleInfoBtn" style="
                     background-color: #17a2b8;
                     color: white;
@@ -230,12 +232,12 @@
             <!-- setupSale Button -->
             <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #4CAF50;">
                 <h4 style="margin-top: 0; color: #555;">🚀 setupSale()</h4>
-                <p style="font-size: 0.9em; color: #666; margin: 5px 0 10px 0;">새로운 티켓 판매를 설정합니다 (Admin 전용, 트랜잭션 필요)</p>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0 10px 0;">Setup new ticket sale (Admin only, Transaction required)</p>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
                     <label style="min-width: 80px; font-weight: 600;">Duration:</label>
-                    <input type="number" id="durationInput" value="10" placeholder="블록 수" style="flex: 1; padding: 8px;">
-                    <span style="font-size: 12px; color: #666;">블록</span>
+                    <input type="number" id="durationInput" value="10" placeholder="blocks" style="flex: 1; padding: 8px;">
+                    <span style="font-size: 12px; color: #666;">blocks</span>
                 </div>
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
@@ -246,8 +248,8 @@
                 
                 <div style="display: flex; gap: 10px; margin-bottom: 10px; align-items: center;">
                     <label style="min-width: 80px; font-weight: 600;">Max Tickets:</label>
-                    <input type="number" id="maxTicketsInput" value="2" placeholder="티켓 수" style="flex: 1; padding: 8px;">
-                    <span style="font-size: 12px; color: #666;">장</span>
+                    <input type="number" id="maxTicketsInput" value="2" placeholder="tickets" style="flex: 1; padding: 8px;">
+                    <span style="font-size: 12px; color: #666;">tickets</span>
                 </div>
 
                 <button id="setupSaleBtn" style="
@@ -269,7 +271,7 @@
                 <!-- settleSale Button -->
                 <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #FF9800;">
                     <h4 style="margin-top: 0; color: #555;">✅ settleSale()</h4>
-                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">판매를 정산하고 당첨자를 선정합니다 (Admin 전용, 트랜잭션 필요)</p>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Settle sale and select winners (Admin only, Transaction required)</p>
                     <button id="settleSaleBtn" style="
                         background-color: #FF9800;
                         color: white;
@@ -287,7 +289,7 @@
                 <!-- withdrawFunds Button -->
                 <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #4CAF50;">
                     <h4 style="margin-top: 0; color: #555;">💰 withdrawFunds()</h4>
-                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">판매 수익을 인출합니다 (Admin 전용, 트랜잭션 필요)</p>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Withdraw sales revenue (Admin only, Transaction required)</p>
                     <button id="withdrawFundsBtn" style="
                         background-color: #4CAF50;
                         color: white;
@@ -306,8 +308,8 @@
             <!-- reset Button -->
             <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #fff5f5; border-left: 4px solid #dc3545;">
                 <h4 style="margin-top: 0; color: #555;">🔥 reset()</h4>
-                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">컨트랙트를 초기 상태로 리셋합니다 (Admin 전용, 트랜잭션 필요)</p>
-                <p style="font-size: 0.85em; color: #dc3545; font-weight: 600; margin: 5px 0;">⚠️ 경고: 모든 예약 데이터가 삭제되고 남은 USDC가 Admin에게 전송됩니다</p>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Reset contract to initial state (Admin only, Transaction required)</p>
+                <p style="font-size: 0.85em; color: #dc3545; font-weight: 600; margin: 5px 0;">⚠️ Warning: All reservation data will be deleted and remaining USDC will be sent to Admin</p>
                 <button id="resetBtn" style="
                     background-color: #dc3545;
                     color: white;
@@ -323,10 +325,7 @@
             </div>
 
         </div>
-
-        <div id="contractCallStatus" style="margin-top: 15px; padding: 15px; display: none; border-radius: 5px;"></div>
     </div>
-
 
     <script>
         // Base Sepolia Network Configuration
@@ -392,26 +391,26 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 컨트랙트 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to contract...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await switchToBaseSepolia();
 
-                statusDiv.innerHTML = '🔄 getSaleInfo() 호출 중...';
+                statusDiv.innerHTML = '🔄 Calling getSaleInfo()...';
 
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
                 const saleInfo = await contract.getSaleInfo();
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ 판매 정보 조회 성공!<br><br>
+                statusDiv.innerHTML = `✅ Sale info retrieved successfully!<br><br>
                     <strong>📊 Sale Information:</strong><br>
                     • <strong>End Block:</strong> ${saleInfo._endBlock.toString()}<br>
                     • <strong>Ticket Price:</strong> ${formatUSDC(saleInfo._ticketPrice)} USDC<br>
@@ -424,7 +423,7 @@
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
-                statusDiv.innerHTML = `❌ 에러: ${error.message}`;
+                statusDiv.innerHTML = `❌ Error: ${error.message}`;
             }
         });
 
@@ -434,21 +433,21 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = provider.getSigner();
                 const userAddress = await signer.getAddress();
 
-                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
 
                 await switchToBaseSepolia();
 
@@ -460,25 +459,25 @@
                 // Convert price to USDC units (6 decimals)
                 const priceInUnits = ethers.utils.parseUnits(priceInUSDC, 6);
 
-                statusDiv.innerHTML = `🔄 setupSale() 실행 중...<br><br>Duration: ${duration} 블록<br>Price: ${priceInUSDC} USDC<br>Max Tickets: ${maxTickets}장<br><br><strong>메타마스크에서 확인해주세요</strong>`;
+                statusDiv.innerHTML = `🔄 Calling setupSale()...<br><br>Duration: ${duration} blocks<br>Price: ${priceInUSDC} USDC<br>Max Tickets: ${maxTickets}<br><br><strong>Please confirm in MetaMask</strong>`;
 
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 const tx = await contract.setupSale(duration, priceInUnits, maxTickets);
 
-                statusDiv.innerHTML = `🔄 트랜잭션 제출됨!<br>Hash: ${tx.hash}<br>확인 대기 중...`;
+                statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
                 const receipt = await tx.wait();
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ setupSale() 성공!<br>
+                statusDiv.innerHTML = `✅ setupSale() successful!<br>
                     Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
                     Block: ${receipt.blockNumber}<br>
                     Gas Used: ${receipt.gasUsed.toString()}<br><br>
-                    <strong>설정된 값:</strong><br>
-                    • Duration: ${duration} 블록<br>
+                    <strong>Configured Values:</strong><br>
+                    • Duration: ${duration} blocks<br>
                     • Price: ${priceInUSDC} USDC<br>
-                    • Max Tickets: ${maxTickets}장`;
+                    • Max Tickets: ${maxTickets}`;
 
             } catch (error) {
                 console.error('setupSale error:', error);
@@ -486,15 +485,15 @@
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
                 
-                let errorMessage = 'setupSale() 실패!';
+                let errorMessage = 'setupSale() failed!';
                 if (error.code === 4001) {
-                    errorMessage = '❌ 사용자가 트랜잭션을 거부했습니다';
+                    errorMessage = '❌ User rejected the transaction';
                 } else if (error.message && error.message.includes('Sale already set up')) {
-                    errorMessage = '❌ 이미 판매가 설정되어 있습니다. reset()을 먼저 실행하세요.';
+                    errorMessage = '❌ Sale already set up. Please run reset() first.';
                 } else if (error.message && error.message.includes('Only admin')) {
-                    errorMessage = '❌ Admin 권한이 필요합니다';
+                    errorMessage = '❌ Admin permission required';
                 } else {
-                    errorMessage = `❌ 에러: ${error.message}`;
+                    errorMessage = `❌ Error: ${error.message}`;
                 }
                 
                 statusDiv.innerHTML = errorMessage;
@@ -507,39 +506,39 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = provider.getSigner();
                 const userAddress = await signer.getAddress();
 
-                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
 
                 await switchToBaseSepolia();
 
-                statusDiv.innerHTML = '🔄 settleSale() 호출 중...<br><strong>메타마스크에서 확인해주세요</strong>';
+                statusDiv.innerHTML = '🔄 Calling settleSale()...<br><strong>Please confirm in MetaMask</strong>';
 
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 const tx = await contract.settleSale();
 
-                statusDiv.innerHTML = `🔄 트랜잭션 제출됨!<br>Hash: ${tx.hash}<br>확인 대기 중...`;
+                statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
                 const receipt = await tx.wait();
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ settleSale() 성공!<br>
+                statusDiv.innerHTML = `✅ settleSale() successful!<br>
                     Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
                     Block: ${receipt.blockNumber}<br>
-                    <small>판매가 정산되었습니다. 당첨자가 선정되고 낙첨자는 환불받을 수 있습니다.</small>`;
+                    <small>Sale settled. Winners selected and losers can request refunds.</small>`;
 
             } catch (error) {
                 console.error('settleSale error:', error);
@@ -547,17 +546,17 @@
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
                 
-                let errorMessage = 'settleSale() 실패!';
+                let errorMessage = 'settleSale() failed!';
                 if (error.code === 4001) {
-                    errorMessage = '❌ 사용자가 트랜잭션을 거부했습니다';
+                    errorMessage = '❌ User rejected the transaction';
                 } else if (error.message && error.message.includes('Sale is still active')) {
-                    errorMessage = '❌ 판매 기간이 아직 종료되지 않았습니다';
+                    errorMessage = '❌ Sale period has not ended yet';
                 } else if (error.message && error.message.includes('already settled')) {
-                    errorMessage = '❌ 이미 정산이 완료되었습니다';
+                    errorMessage = '❌ Sale already settled';
                 } else if (error.message && error.message.includes('Only admin')) {
-                    errorMessage = '❌ Admin 권한이 필요합니다';
+                    errorMessage = '❌ Admin permission required';
                 } else {
-                    errorMessage = `❌ 에러: ${error.message}`;
+                    errorMessage = `❌ Error: ${error.message}`;
                 }
                 
                 statusDiv.innerHTML = errorMessage;
@@ -570,39 +569,39 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = provider.getSigner();
                 const userAddress = await signer.getAddress();
 
-                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
 
                 await switchToBaseSepolia();
 
-                statusDiv.innerHTML = '🔄 withdrawFunds() 호출 중...<br><strong>메타마스크에서 확인해주세요</strong>';
+                statusDiv.innerHTML = '🔄 Calling withdrawFunds()...<br><strong>Please confirm in MetaMask</strong>';
 
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 const tx = await contract.withdrawFunds();
 
-                statusDiv.innerHTML = `🔄 트랜잭션 제출됨!<br>Hash: ${tx.hash}<br>확인 대기 중...`;
+                statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
                 const receipt = await tx.wait();
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ withdrawFunds() 성공!<br>
+                statusDiv.innerHTML = `✅ withdrawFunds() successful!<br>
                     Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
                     Block: ${receipt.blockNumber}<br>
-                    <small>판매 수익이 Admin 지갑으로 전송되었습니다.</small>`;
+                    <small>Sales revenue transferred to Admin wallet.</small>`;
 
             } catch (error) {
                 console.error('withdrawFunds error:', error);
@@ -610,17 +609,17 @@
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
                 
-                let errorMessage = 'withdrawFunds() 실패!';
+                let errorMessage = 'withdrawFunds() failed!';
                 if (error.code === 4001) {
-                    errorMessage = '❌ 사용자가 트랜잭션을 거부했습니다';
+                    errorMessage = '❌ User rejected the transaction';
                 } else if (error.message && error.message.includes('Sale must be settled first')) {
-                    errorMessage = '❌ 먼저 settleSale()을 실행해야 합니다';
+                    errorMessage = '❌ Must run settleSale() first';
                 } else if (error.message && error.message.includes('No revenue available')) {
-                    errorMessage = '❌ 인출 가능한 수익이 없습니다';
+                    errorMessage = '❌ No revenue available to withdraw';
                 } else if (error.message && error.message.includes('Only admin')) {
-                    errorMessage = '❌ Admin 권한이 필요합니다';
+                    errorMessage = '❌ Admin permission required';
                 } else {
-                    errorMessage = `❌ 에러: ${error.message}`;
+                    errorMessage = `❌ Error: ${error.message}`;
                 }
                 
                 statusDiv.innerHTML = errorMessage;
@@ -629,7 +628,7 @@
 
         // reset Button Handler
         document.getElementById('resetBtn').addEventListener('click', async () => {
-            const confirmed = confirm('⚠️ 경고: 컨트랙트를 초기화하면 모든 예약 데이터가 삭제됩니다.\n정말 실행하시겠습니까?');
+            const confirmed = confirm('⚠️ Warning: Resetting the contract will delete all reservation data.\nAre you sure you want to proceed?');
             
             if (!confirmed) {
                 return;
@@ -639,39 +638,39 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = provider.getSigner();
                 const userAddress = await signer.getAddress();
 
-                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
 
                 await switchToBaseSepolia();
 
-                statusDiv.innerHTML = '🔄 reset() 호출 중...<br><strong>메타마스크에서 확인해주세요</strong><br><small>⚠️ 모든 데이터가 삭제됩니다</small>';
+                statusDiv.innerHTML = '🔄 Calling reset()...<br><strong>Please confirm in MetaMask</strong><br><small>⚠️ All data will be deleted</small>';
 
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 const tx = await contract.reset();
 
-                statusDiv.innerHTML = `🔄 트랜잭션 제출됨!<br>Hash: ${tx.hash}<br>확인 대기 중...`;
+                statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
                 const receipt = await tx.wait();
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ reset() 성공!<br>
+                statusDiv.innerHTML = `✅ reset() successful!<br>
                     Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
                     Block: ${receipt.blockNumber}<br>
-                    <small>컨트랙트가 초기 상태로 리셋되었습니다. 모든 예약 데이터가 삭제되고 남은 USDC가 Admin에게 전송되었습니다.</small>`;
+                    <small>Contract reset to initial state. All reservation data deleted and remaining USDC sent to Admin.</small>`;
 
             } catch (error) {
                 console.error('reset error:', error);
@@ -679,13 +678,13 @@
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
                 
-                let errorMessage = 'reset() 실패!';
+                let errorMessage = 'reset() failed!';
                 if (error.code === 4001) {
-                    errorMessage = '❌ 사용자가 트랜잭션을 거부했습니다';
+                    errorMessage = '❌ User rejected the transaction';
                 } else if (error.message && error.message.includes('Only admin')) {
-                    errorMessage = '❌ Admin 권한이 필요합니다';
+                    errorMessage = '❌ Admin permission required';
                 } else {
-                    errorMessage = `❌ 에러: ${error.message}`;
+                    errorMessage = `❌ Error: ${error.message}`;
                 }
                 
                 statusDiv.innerHTML = errorMessage;
@@ -694,15 +693,15 @@
 
     </script>
 
-    <!-- 환경 정보 섹션 -->
+    <!-- Environment Info Section -->
     <div class="section">
-        <h2>🌐 환경 정보</h2>
+        <h2>🌐 Environment Info</h2>
         <div style="margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px; border-left: 4px solid #2196F3;">
             <ul style="margin: 10px 0;">
-                <li><strong>네트워크:</strong> Base Sepolia (Chain ID: 84532)</li>
+                <li><strong>Network:</strong> Base Sepolia (Chain ID: 84532)</li>
                 <li><strong>RPC URL:</strong> https://sepolia.base.org</li>
-                <li><strong>컨트랙트 주소:</strong> <code style="background: white; padding: 2px 6px; border-radius: 3px;">0x55Cf458212822b33d8485969f4616FA8D9b6e1A7</code></li>
-                <li><strong>탐색기:</strong> <a href="https://sepolia.basescan.org" target="_blank">Base Sepolia Explorer</a></li>
+                <li><strong>Contract Address:</strong> <code style="background: white; padding: 2px 6px; border-radius: 3px;">0x55Cf458212822b33d8485969f4616FA8D9b6e1A7</code></li>
+                <li><strong>Explorer:</strong> <a href="https://sepolia.basescan.org" target="_blank">Base Sepolia Explorer</a></li>
             </ul>
         </div>
     </div>

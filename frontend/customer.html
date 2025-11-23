@@ -103,13 +103,13 @@
 
     <!-- ==================== Section 1: Smart Contract Functions ==================== -->
     <div class="section">
-        <h2>🔗 스마트 컨트랙트 함수 호출</h2>
-        <p><strong>설명:</strong> BuenosTickets 컨트랙트와 직접 통신합니다.</p>
+        <h2>🔗 Smart Contract Functions</h2>
+        <p><strong>Description:</strong> Direct communication with BuenosTickets contract.</p>
 
         <div id="successBanner" style="display: none;"></div>
         
         <div style="margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px; border-left: 4px solid #2196F3;">
-            <h3 style="margin-top: 0; color: #1976D2;">📍 환경 정보</h3>
+            <h3 style="margin-top: 0; color: #1976D2;">📍 Environment Info</h3>
             <ul style="margin: 10px 0;">
                 <li><strong>Network:</strong> Base Sepolia (Chain ID: 84532)</li>
                 <li><strong>Smart Contract Address:</strong> <code style="background: white; padding: 2px 6px; border-radius: 3px;">0x55Cf458212822b33d8485969f4616FA8D9b6e1A7</code></li>
@@ -125,7 +125,7 @@
                 margin-top: 10px;
                 width: 100%;
             ">
-                🔍 Base Sepolia Explorer에서 내 주소 보기
+                🔍 View My Address on Base Sepolia Explorer
             </button>
         </div>
 
@@ -136,7 +136,7 @@
                 <!-- getSaleInfo Button -->
                 <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #17a2b8;">
                     <h4 style="margin-top: 0; color: #555;">📊 getSaleInfo()</h4>
-                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">판매 정보를 조회합니다 (읽기 전용)</p>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Query sale information (Read-only)</p>
                     <button id="getSaleInfoBtn" style="
                         background-color: #17a2b8;
                         color: white;
@@ -154,7 +154,7 @@
                 <!-- getUserStatus Button -->
                 <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #6c757d;">
                     <h4 style="margin-top: 0; color: #555;">👤 getUserStatus(address user)</h4>
-                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">내 예약 상태를 조회합니다 (읽기 전용)</p>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Check my reservation status (Read-only)</p>
                     <button id="getUserStatusBtn" style="
                         background-color: #6c757d;
                         color: white;
@@ -172,8 +172,8 @@
 
             <!-- Approve USDC & Reserve Ticket (2-step process in one row) -->
             <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #fff9e6; border-left: 4px solid #FF9800;">
-                <h4 style="margin-top: 0; color: #555;">🎫 티켓 예약 (2단계 프로세스)</h4>
-                <p style="font-size: 0.9em; color: #666; margin: 5px 0 15px 0;">USDC 승인 후 티켓을 예약합니다</p>
+                <h4 style="margin-top: 0; color: #555;">🎫 Reserve Ticket (2-Step Process)</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0 15px 0;">Approve USDC then reserve your ticket</p>
                 <div style="display: flex; gap: 10px;">
                     <div style="flex: 1;">
                         <button id="approveBtn" style="
@@ -211,7 +211,7 @@
                 <!-- refund Button -->
                 <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #dc3545;">
                     <h4 style="margin-top: 0; color: #555;">💸 refund()</h4>
-                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">당첨되지 않은 경우 환불을 받습니다 (트랜잭션 필요)</p>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Get refund if not selected (Transaction required)</p>
                     <button id="refundBtn" style="
                         background-color: #dc3545;
                         color: white;
@@ -229,7 +229,7 @@
                 <!-- spinWheel Button -->
                 <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #2196F3;">
                     <h4 style="margin-top: 0; color: #555;">🎰 spinWheel()</h4>
-                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Pyth Entropy를 사용하여 당첨자를 추첨합니다 (Admin 전용, 트랜잭션 필요)</p>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Draw winners using Pyth Entropy (Admin only, Transaction required)</p>
                     <button id="spinWheelBtn" style="
                         background-color: #2196F3;
                         color: white;
@@ -253,7 +253,7 @@
     <!-- ==================== Section 2: Event Information ==================== -->
     <div class="section">
         <h2>💃 Event Information</h2>
-        <p><strong>Description:</strong> 아르헨티나의 열정이 담긴 탱고 공연 티켓을 예약하세요</p>
+        <p><strong>Description:</strong> Reserve your ticket for the passionate Argentine Tango performance</p>
         
         <!-- Display event poster image -->
         <div>
@@ -268,7 +268,7 @@
             <p id="eventTitle">Buenos Aires Tango Night</p>
 
             <h3>Description</h3>
-            <p id="eventDescription">세계적인 탱고 댄서들이 선사하는 열정적인 무대. 부에노스아이레스의 밤을 서울에서 만나보세요. 라이브 밴드 연주와 함께하는 클래식 탱고 퍼포먼스를 경험할 수 있는 특별한 기회입니다.</p>
+            <p id="eventDescription">Experience a passionate stage presented by world-class tango dancers. Meet the night of Buenos Aires in Seoul. A special opportunity to experience classic tango performance with live band music.</p>
 
             <h3>Ticket Price</h3>
             <p id="ticketPrice">0.01 USDC</p>
@@ -912,7 +912,7 @@
         document.getElementById('viewMyAddressBtn').addEventListener('click', async () => {
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
@@ -928,9 +928,9 @@
             } catch (error) {
                 console.error('View address error:', error);
                 if (error.code === 4001) {
-                    alert('❌ 메타마스크 연결이 거부되었습니다');
+                    alert('❌ MetaMask connection rejected');
                 } else {
-                    alert(`❌ 에러: ${error.message}`);
+                    alert(`❌ Error: ${error.message}`);
                 }
             }
         });
@@ -981,14 +981,14 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 컨트랙트 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to contract...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
@@ -1004,35 +1004,35 @@
                     provider
                 );
 
-                statusDiv.innerHTML = '🔄 getSaleInfo() 호출 중...';
+                statusDiv.innerHTML = '🔄 Calling getSaleInfo()...';
 
                 const saleInfo = await contract.getSaleInfo();
                 
-                // Is Settled 상태 체크 후 사용자 상태 확인
+                // Check Is Settled status then check user status
                 if (saleInfo._isSettled) {
-                    // 백그라운드에서 getUserStatus 조회 (결과 영역에 표시 안 함)
+                    // Query getUserStatus in background (not displayed in result area)
                     const userStatus = await contract.getUserStatus(userAddress);
                     
-                    // Status가 2 (Selected, 당첨)일 때만 폭죽과 축하 문구 표시
+                    // Show fireworks and congratulations only when Status = 2 (Selected, Winner)
                     if (userStatus === 2) {
                         successBanner.style.display = 'block';
                         successBanner.className = 'success-banner';
-                        successBanner.innerHTML = '🎉 축하합니다! 티켓 당첨! 🎉';
+                        successBanner.innerHTML = '🎉 Congratulations! You Won the Ticket! 🎉';
                         
-                        // 폭죽 애니메이션 실행 (배너는 유지, 애니메이션만 3초 후 제거)
+                        // Execute fireworks animation (banner stays, animation removed after 3 seconds)
                         createFireworks();
                     } else {
-                        // 당첨되지 않은 경우 배너 숨김
+                        // Hide banner if not selected
                         successBanner.style.display = 'none';
                     }
                 } else {
-                    // Is Settled가 No이면 배너 숨김
+                    // Hide banner if not settled
                     successBanner.style.display = 'none';
                 }
                 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ 판매 정보 조회 성공!<br><br>
+                statusDiv.innerHTML = `✅ Sale info retrieved successfully!<br><br>
                     <strong>📊 Sale Information:</strong><br>
                     • <strong>End Block:</strong> ${saleInfo._endBlock.toString()}<br>
                     • <strong>Ticket Price:</strong> ${ethers.utils.formatUnits(saleInfo._ticketPrice, 6)} USDC<br>
@@ -1045,9 +1045,9 @@
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
-                statusDiv.innerHTML = `❌ 에러: ${error.message}`;
+                statusDiv.innerHTML = `❌ Error: ${error.message}`;
                 
-                // 에러 시에도 배너 숨김
+                // Hide banner on error
                 successBanner.style.display = 'none';
             }
         });
@@ -1058,21 +1058,21 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = provider.getSigner();
                 const userAddress = await signer.getAddress();
 
-                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
 
                 await switchToBaseSepolia();
 
@@ -1083,7 +1083,7 @@
                     provider
                 );
 
-                statusDiv.innerHTML = `🔄 getUserStatus() 호출 중...`;
+                statusDiv.innerHTML = `🔄 Calling getUserStatus()...`;
 
                 const status = await contract.getUserStatus(userAddress);
                 const statusText = getStatusText(status);
@@ -1098,16 +1098,16 @@
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ 내 상태 조회 성공!<br><br>
+                statusDiv.innerHTML = `✅ Status retrieved successfully!<br><br>
                     <strong>👤 My Status:</strong><br>
                     • <strong>Address:</strong> ${userAddress}<br>
                     • <strong>Status:</strong> <span style="color: ${statusColor}; font-weight: bold;">${statusEmoji} ${statusText} (${status})</span><br><br>
                     <small>
-                        <strong>Status 설명:</strong><br>
-                        0 = Unreserved (예약 안함) ⚪<br>
-                        1 = Reserved (예약됨, 추첨 대기) 🟡<br>
-                        2 = Selected (당첨!) 🟢<br>
-                        3 = Refunded (환불 완료) 🔴
+                        <strong>Status Description:</strong><br>
+                        0 = Unreserved (Not reserved) ⚪<br>
+                        1 = Reserved (Reserved, waiting for draw) 🟡<br>
+                        2 = Selected (Winner!) 🟢<br>
+                        3 = Refunded (Refunded) 🔴
                     </small>`;
 
             } catch (error) {
@@ -1115,7 +1115,7 @@
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
-                statusDiv.innerHTML = `❌ 에러: ${error.message}`;
+                statusDiv.innerHTML = `❌ Error: ${error.message}`;
             }
         });
 
@@ -1125,21 +1125,21 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = provider.getSigner();
                 const userAddress = await signer.getAddress();
 
-                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
 
                 await switchToBaseSepolia();
 
@@ -1150,68 +1150,68 @@
                     signer
                 );
 
-                // 사전 체크 1: 추첨 완료 여부 확인
-                statusDiv.innerHTML = '🔄 컨트랙트 상태 확인 중...';
+                // Pre-check 1: Check if settled
+                statusDiv.innerHTML = '🔄 Checking contract status...';
                 const isSettled = await contract.isSettled();
                 
                 if (!isSettled) {
                     statusDiv.style.backgroundColor = '#fff3cd';
                     statusDiv.style.color = '#856404';
-                    statusDiv.innerHTML = `⚠️ <strong>환불 불가</strong><br><br>
-                        추첨이 아직 진행되지 않았습니다.<br>
-                        추첨 완료 후 환불이 가능합니다.<br><br>
-                        <small>💡 <strong>Tip:</strong> "Get Sale Info" 버튼으로 현재 상태를 확인하세요.<br>
-                        Is Settled가 "Yes"로 변경되면 환불을 요청할 수 있습니다.</small>`;
+                    statusDiv.innerHTML = `⚠️ <strong>Refund Not Available</strong><br><br>
+                        The draw has not been completed yet.<br>
+                        Refund is available after the draw.<br><br>
+                        <small>💡 <strong>Tip:</strong> Check current status with "Get Sale Info" button.<br>
+                        You can request a refund when Is Settled changes to "Yes".</small>`;
                     return;
                 }
 
-                // 사전 체크 2: 사용자의 예약 상태 확인
-                statusDiv.innerHTML = '🔄 사용자 예약 상태 확인 중...';
+                // Pre-check 2: Check user's reservation status
+                statusDiv.innerHTML = '🔄 Checking user reservation status...';
                 const userStatus = await contract.getUserStatus(userAddress);
                 
                 if (userStatus === 0) {
                     statusDiv.style.backgroundColor = '#fff3cd';
                     statusDiv.style.color = '#856404';
-                    statusDiv.innerHTML = `⚠️ <strong>환불 불가</strong><br><br>
-                        예약 내역이 없습니다.<br>
-                        환불을 받으려면 먼저 티켓을 예약해야 합니다.`;
+                    statusDiv.innerHTML = `⚠️ <strong>Refund Not Available</strong><br><br>
+                        No reservation found.<br>
+                        You need to reserve a ticket first to get a refund.`;
                     return;
                 }
 
                 if (userStatus === 2) {
                     statusDiv.style.backgroundColor = '#d1ecf1';
                     statusDiv.style.color = '#0c5460';
-                    statusDiv.innerHTML = `🎉 <strong>축하합니다!</strong><br><br>
-                        당첨되었습니다!<br>
-                        당첨자는 환불을 받을 수 없습니다.<br><br>
-                        <small>💡 티켓 구매가 확정되었습니다.</small>`;
+                    statusDiv.innerHTML = `🎉 <strong>Congratulations!</strong><br><br>
+                        You won the ticket!<br>
+                        Winners cannot receive refunds.<br><br>
+                        <small>💡 Your ticket purchase is confirmed.</small>`;
                     return;
                 }
 
                 if (userStatus === 3) {
                     statusDiv.style.backgroundColor = '#d4edda';
                     statusDiv.style.color = '#155724';
-                    statusDiv.innerHTML = `✅ 이미 환불을 받았습니다.<br><br>
-                        중복 환불은 불가능합니다.`;
+                    statusDiv.innerHTML = `✅ Already refunded.<br><br>
+                        Duplicate refunds are not allowed.`;
                     return;
                 }
 
-                // 사전 체크 통과 - 이제 MetaMask 팝업이 뜹니다
-                statusDiv.innerHTML = '🔄 refund() 호출 중...<br><strong>메타마스크에서 확인해주세요</strong>';
+                // Pre-checks passed - MetaMask popup will appear
+                statusDiv.innerHTML = '🔄 Calling refund()...<br><strong>Please confirm in MetaMask</strong>';
 
                 // Call refund()
                 const tx = await contract.refund();
                 
-                statusDiv.innerHTML = `🔄 트랜잭션 제출됨!<br>Hash: ${tx.hash}<br>확인 대기 중...`;
+                statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
                 const receipt = await tx.wait();
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ 환불 성공!<br>
+                statusDiv.innerHTML = `✅ Refund successful!<br>
                     Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
                     Block: ${receipt.blockNumber}<br>
-                    <small>환불이 완료되었습니다. USDC가 귀하의 지갑으로 반환되었습니다.</small>`;
+                    <small>Refund completed. USDC has been returned to your wallet.</small>`;
 
             } catch (error) {
                 console.error('refund error:', error);
@@ -1219,17 +1219,17 @@
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
                 
-                let errorMessage = '환불 실패!';
+                let errorMessage = 'Refund failed!';
                 if (error.code === 4001) {
-                    errorMessage = '❌ 사용자가 트랜잭션을 거부했습니다';
+                    errorMessage = '❌ User rejected the transaction';
                 } else if (error.message && error.message.includes('No active reservation')) {
-                    errorMessage = '❌ 예약 내역이 없습니다';
+                    errorMessage = '❌ No reservation found';
                 } else if (error.message && error.message.includes('User was either selected or already refunded')) {
-                    errorMessage = '❌ 이미 당첨되었거나 환불을 받았습니다';
+                    errorMessage = '❌ Already won or refunded';
                 } else if (error.message && error.message.includes('Sale must be settled first')) {
-                    errorMessage = '❌ 추첨이 아직 진행되지 않았습니다. 추첨 완료 후 환불 가능합니다.';
+                    errorMessage = '❌ Draw not completed yet. Refund available after draw.';
                 } else {
-                    errorMessage = `❌ 에러: ${error.message}`;
+                    errorMessage = `❌ Error: ${error.message}`;
                 }
                 
                 statusDiv.innerHTML = errorMessage;
@@ -1242,21 +1242,21 @@
             
             try {
                 if (typeof window.ethereum === 'undefined') {
-                    alert('메타마스크를 설치해주세요!');
+                    alert('Please install MetaMask!');
                     return;
                 }
 
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = provider.getSigner();
                 const userAddress = await signer.getAddress();
 
-                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
 
                 await switchToBaseSepolia();
 
@@ -1267,22 +1267,22 @@
                     signer
                 );
 
-                statusDiv.innerHTML = '🔄 spinWheel() 호출 중...<br><strong>메타마스크에서 확인해주세요</strong><br><br><small>⚠️ Admin 권한이 필요합니다</small>';
+                statusDiv.innerHTML = '🔄 Calling spinWheel()...<br><strong>Please confirm in MetaMask</strong><br><br><small>⚠️ Admin permission required</small>';
 
                 // Call spinWheel()
                 const tx = await contract.spinWheel();
                 
-                statusDiv.innerHTML = `🔄 트랜잭션 제출됨!<br>Hash: ${tx.hash}<br>확인 대기 중...<br><small>Pyth Entropy를 사용한 랜덤 추첨 진행 중...</small>`;
+                statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...<br><small>Drawing winners with Pyth Entropy...</small>`;
 
                 const receipt = await tx.wait();
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ 추첨 완료!<br>
+                statusDiv.innerHTML = `✅ Draw completed!<br>
                     Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
                     Block: ${receipt.blockNumber}<br>
-                    <small>🎰 Pyth Entropy를 사용한 랜덤 추첨이 완료되었습니다.<br>
-                    당첨자가 선정되었고, 낙첨자는 환불을 받을 수 있습니다.</small>`;
+                    <small>🎰 Random draw using Pyth Entropy completed.<br>
+                    Winners have been selected and losers can request refunds.</small>`;
 
             } catch (error) {
                 console.error('spinWheel error:', error);
@@ -1290,19 +1290,19 @@
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
                 
-                let errorMessage = '추첨 실패!';
+                let errorMessage = 'Draw failed!';
                 if (error.code === 4001) {
-                    errorMessage = '❌ 사용자가 트랜잭션을 거부했습니다';
+                    errorMessage = '❌ User rejected the transaction';
                 } else if (error.message && error.message.includes('Only admin')) {
-                    errorMessage = '❌ Admin 권한이 필요합니다';
+                    errorMessage = '❌ Admin permission required';
                 } else if (error.message && error.message.includes('Sale is still active')) {
-                    errorMessage = '❌ 판매 기간이 아직 종료되지 않았습니다';
+                    errorMessage = '❌ Sale period has not ended yet';
                 } else if (error.message && error.message.includes('already settled')) {
-                    errorMessage = '❌ 이미 추첨이 완료되었습니다';
+                    errorMessage = '❌ Draw already completed';
                 } else if (error.message && error.message.includes('Invalid Pyth Entropy')) {
-                    errorMessage = '❌ Pyth Entropy 콜백이 아직 실행되지 않았습니다. settleSale() 실행 후 대기해주세요.';
+                    errorMessage = '❌ Pyth Entropy callback not executed yet. Please wait after running settleSale().';
                 } else {
-                    errorMessage = `❌ 에러: ${error.message}`;
+                    errorMessage = `❌ Error: ${error.message}`;
                 }
                 
                 statusDiv.innerHTML = errorMessage;
