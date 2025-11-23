@@ -305,6 +305,24 @@
                 </div>
             </div>
 
+            <!-- spinWheel Button -->
+            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #2196F3;">
+                <h4 style="margin-top: 0; color: #555;">🎰 spinWheel()</h4>
+                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Draw winners using Pyth Entropy (Admin only, Transaction required)</p>
+                <button id="spinWheelBtn" style="
+                    background-color: #2196F3;
+                    color: white;
+                    padding: 12px 24px;
+                    font-size: 14px;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    width: 100%;
+                ">
+                    Spin the Wheel
+                </button>
+            </div>
+
             <!-- reset Button -->
             <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #fff5f5; border-left: 4px solid #dc3545;">
                 <h4 style="margin-top: 0; color: #555;">🔥 reset()</h4>
@@ -350,6 +368,7 @@
             'function getSaleInfo() external view returns (uint256 _endBlock, uint256 _ticketPrice, uint256 _maxTickets, uint256 _totalReserved, bool _isSettled)',
             'function setupSale(uint256 _duration, uint256 _price, uint256 _maxTickets) external',
             'function settleSale() external payable',
+            'function spinWheel() external',
             'function withdrawFunds() external',
             'function reset() external',
             'function admin() view returns (address)',
@@ -624,6 +643,72 @@
                     errorMessage = '❌ No revenue available to withdraw';
                 } else if (error.message && error.message.includes('Only admin')) {
                     errorMessage = '❌ Admin permission required';
+                } else {
+                    errorMessage = `❌ Error: ${error.message}`;
+                }
+                
+                statusDiv.innerHTML = errorMessage;
+            }
+        });
+
+        // spinWheel Button Handler
+        document.getElementById('spinWheelBtn').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('contractCallStatus');
+            
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('Please install MetaMask!');
+                    return;
+                }
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.innerHTML = '🔄 Connecting to MetaMask...';
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                statusDiv.innerHTML = `🔄 Connected: ${userAddress}<br>Checking network...`;
+
+                await switchToBaseSepolia();
+
+                statusDiv.innerHTML = '🔄 Calling spinWheel()...<br><strong>Please confirm in MetaMask</strong><br><br><small>⚠️ Admin permission required</small>';
+
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                const tx = await contract.spinWheel();
+
+                statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...<br><small>Drawing winners with Pyth Entropy...</small>`;
+
+                const receipt = await tx.wait();
+
+                statusDiv.style.backgroundColor = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.innerHTML = `✅ Draw completed!<br>
+                    Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
+                    Block: ${receipt.blockNumber}<br>
+                    <small>🎰 Random draw using Pyth Entropy completed.<br>
+                    Winners have been selected and losers can request refunds.</small>`;
+
+            } catch (error) {
+                console.error('spinWheel error:', error);
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                
+                let errorMessage = 'Draw failed!';
+                if (error.code === 4001) {
+                    errorMessage = '❌ User rejected the transaction';
+                } else if (error.message && error.message.includes('Only admin')) {
+                    errorMessage = '❌ Admin permission required';
+                } else if (error.message && error.message.includes('Sale is still active')) {
+                    errorMessage = '❌ Sale period has not ended yet';
+                } else if (error.message && error.message.includes('already settled')) {
+                    errorMessage = '❌ Draw already completed';
+                } else if (error.message && error.message.includes('Invalid Pyth Entropy')) {
+                    errorMessage = '❌ Pyth Entropy callback not executed yet. Please wait after running settleSale().';
                 } else {
                     errorMessage = `❌ Error: ${error.message}`;
                 }
