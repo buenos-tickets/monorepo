@@ -41,6 +41,61 @@
             max-width: 100%;
             overflow: hidden;
         }
+        
+        /* 폭죽 애니메이션 */
+        .fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            animation: explode 3s ease-out forwards;
+        }
+        
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .success-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -51,6 +106,8 @@
         <h2>🔗 스마트 컨트랙트 함수 호출</h2>
         <p><strong>설명:</strong> BuenosTickets 컨트랙트와 직접 통신합니다.</p>
 
+        <div id="successBanner" style="display: none;"></div>
+        
         <div style="margin-bottom: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px; border-left: 4px solid #2196F3;">
             <h3 style="margin-top: 0; color: #1976D2;">📍 환경 정보</h3>
             <ul style="margin: 10px 0;">
@@ -218,7 +275,8 @@
         </div>
     </div>
 
-    <!-- ==================== Section 3: Configuration ==================== -->
+    <!-- ==================== Section 3: Configuration (숨김처리 - 나중에 개발 재개 가능) ==================== -->
+    <!--
     <div class="section">
         <h2>⚙️ Configuration</h2>
         <p><strong>Description:</strong> Network and facilitator settings for x402 payment protocol. Pre-configured for Base Sepolia testnet.</p>
@@ -261,8 +319,10 @@
             ⚠️ <strong>Quick Start:</strong> Check "Test Mode" to try x402 flow without setting up a facilitator server.
         </p>
     </div>
+    -->
 
-    <!-- ==================== Section 4: Ticket Purchase ==================== -->
+    <!-- ==================== Section 4: Ticket Purchase (숨김처리 - 나중에 개발 재개 가능) ==================== -->
+    <!--
     <div class="section">
         <h2>🎫 Ticket Purchase</h2>
         <p><strong>Description:</strong> Choose your payment method below. x402 allows gasless transactions through a Facilitator.</p>
@@ -299,6 +359,7 @@
 
         <div id="transactionStatus" style="margin-top: 15px; padding: 10px; display: none;"></div>
     </div>
+    -->
 
     <script>
         // Base Sepolia Network Configuration
@@ -375,6 +436,8 @@
             }
         }
 
+        // ==================== 숨김처리된 섹션의 핸들러들 (나중에 개발 재개 가능) ====================
+        /*
         // Pay Ticket (x402 flow) Button Handler
         document.getElementById('payTicketBtn').addEventListener('click', async () => {
             const statusDiv = document.getElementById('transactionStatus');
@@ -835,6 +898,7 @@
                 statusDiv.innerHTML = errorMessage;
             }
         });
+        */
 
         // ==================== New Smart Contract Function Handlers ====================
         
@@ -871,9 +935,49 @@
             }
         });
 
+        // 폭죽 애니메이션 생성 함수
+        function createFireworks() {
+            const container = document.createElement('div');
+            container.className = 'fireworks-container';
+            document.body.appendChild(container);
+            
+            const colors = ['#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', '#ffa500'];
+            const fireworkCount = 50;
+            
+            for (let i = 0; i < fireworkCount; i++) {
+                setTimeout(() => {
+                    const centerX = Math.random() * window.innerWidth;
+                    const centerY = Math.random() * window.innerHeight * 0.7;
+                    
+                    for (let j = 0; j < 30; j++) {
+                        const firework = document.createElement('div');
+                        firework.className = 'firework';
+                        firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        firework.style.left = centerX + 'px';
+                        firework.style.top = centerY + 'px';
+                        
+                        const angle = (Math.PI * 2 * j) / 30;
+                        const velocity = 50 + Math.random() * 100;
+                        const tx = Math.cos(angle) * velocity;
+                        const ty = Math.sin(angle) * velocity;
+                        
+                        firework.style.setProperty('--tx', tx + 'px');
+                        firework.style.setProperty('--ty', ty + 'px');
+                        
+                        container.appendChild(firework);
+                    }
+                }, i * 60);
+            }
+            
+            setTimeout(() => {
+                container.remove();
+            }, 3000);
+        }
+
         // getSaleInfo Button Handler
         document.getElementById('getSaleInfoBtn').addEventListener('click', async () => {
             const statusDiv = document.getElementById('contractCallStatus');
+            const successBanner = document.getElementById('successBanner');
             
             try {
                 if (typeof window.ethereum === 'undefined') {
@@ -887,6 +991,10 @@
                 statusDiv.innerHTML = '🔄 컨트랙트 연결 중...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
                 await switchToBaseSepolia();
 
                 // Connect to BuenosTickets contract (read-only)
@@ -899,6 +1007,28 @@
                 statusDiv.innerHTML = '🔄 getSaleInfo() 호출 중...';
 
                 const saleInfo = await contract.getSaleInfo();
+                
+                // Is Settled 상태 체크 후 사용자 상태 확인
+                if (saleInfo._isSettled) {
+                    // 백그라운드에서 getUserStatus 조회 (결과 영역에 표시 안 함)
+                    const userStatus = await contract.getUserStatus(userAddress);
+                    
+                    // Status가 2 (Selected, 당첨)일 때만 폭죽과 축하 문구 표시
+                    if (userStatus === 2) {
+                        successBanner.style.display = 'block';
+                        successBanner.className = 'success-banner';
+                        successBanner.innerHTML = '🎉 축하합니다! 티켓 당첨! 🎉';
+                        
+                        // 폭죽 애니메이션 실행 (배너는 유지, 애니메이션만 3초 후 제거)
+                        createFireworks();
+                    } else {
+                        // 당첨되지 않은 경우 배너 숨김
+                        successBanner.style.display = 'none';
+                    }
+                } else {
+                    // Is Settled가 No이면 배너 숨김
+                    successBanner.style.display = 'none';
+                }
                 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
@@ -916,6 +1046,9 @@
                 statusDiv.style.backgroundColor = '#f8d7da';
                 statusDiv.style.color = '#721c24';
                 statusDiv.innerHTML = `❌ 에러: ${error.message}`;
+                
+                // 에러 시에도 배너 숨김
+                successBanner.style.display = 'none';
             }
         });
 
