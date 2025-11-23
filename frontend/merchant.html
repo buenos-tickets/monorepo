@@ -348,7 +348,7 @@
         const CONTRACT_ABI = [
             'function getSaleInfo() external view returns (uint256 _endBlock, uint256 _ticketPrice, uint256 _maxTickets, uint256 _totalReserved, bool _isSettled)',
             'function setupSale(uint256 _duration, uint256 _price, uint256 _maxTickets) external',
-            'function settleSale() external',
+            'function settleSale() external payable',
             'function withdrawFunds() external',
             'function reset() external',
             'function admin() view returns (address)',
@@ -527,7 +527,7 @@
                 statusDiv.innerHTML = '🔄 Calling settleSale()...<br><strong>Please confirm in MetaMask</strong>';
 
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                const tx = await contract.settleSale();
+                const tx = await contract.settleSale({ value: 15000000000001 });
 
                 statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
