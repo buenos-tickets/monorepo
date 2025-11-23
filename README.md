@@ -28,5 +28,11 @@ sequenceDiagram
   end
 ```
 
+## Screenshot
+<img width="950" height="589" alt="screenshot1" src="https://github.com/user-attachments/assets/c9c782c5-af82-4a98-bb54-f9628eb80cf3" />
+<img width="950" height="589" alt="screenshot2" src="https://github.com/user-attachments/assets/a525a0e1-c96b-4077-9c99-20be6997b1b2" />
+<img width="950" height="589" alt="screenshot3" src="https://github.com/user-attachments/assets/84a1a769-31e8-4e24-bc62-3f4ac00012f7" />
+
+
 ## AI
 - Please take a look at [AI_USAGE.md](https://github.com/buenos-tickets/monorepo/blob/main/AI_USAGE.md)
