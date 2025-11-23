@@ -275,7 +275,7 @@
         </div>
     </div>
 
-    <!-- ==================== Section 3: Configuration (숨김처리 - 나중에 개발 재개 가능) ==================== -->
+    <!-- ==================== Section 3: Configuration (Hidden - Can resume development later) ==================== -->
     <!--
     <div class="section">
         <h2>⚙️ Configuration</h2>
@@ -321,12 +321,12 @@
     </div>
     -->
 
-    <!-- ==================== Section 4: Ticket Purchase (숨김처리 - 나중에 개발 재개 가능) ==================== -->
+    <!-- ==================== Section 4: Ticket Purchase (Hidden - Can resume development later) ==================== -->
     <!--
     <div class="section">
         <h2>🎫 Ticket Purchase</h2>
         <p><strong>Description:</strong> Choose your payment method below. x402 allows gasless transactions through a Facilitator.</p>
-        <p style="font-size: 0.9em; color: #666;"><strong>💡 Tip:</strong> 개별 컨트랙트 함수 호출(Approve, Reserve)은 "🔗 스마트 컨트랙트 함수 호출" 섹션을 이용하세요.</p>
+        <p style="font-size: 0.9em; color: #666;"><strong>💡 Tip:</strong> Use "🔗 Smart Contract Functions" section for individual contract function calls (Approve, Reserve).</p>
         
         <button id="payTicketBtn" style="
             background-color: #4CAF50;
@@ -436,9 +436,9 @@
             }
         }
 
-        // ==================== 숨김처리된 섹션의 핸들러들 (나중에 개발 재개 가능) ====================
+        // ==================== Hidden Section Handlers (Can resume development later) ====================
         /*
-        // Pay Ticket (x402 flow) Button Handler
+        // Pay Ticket (x402 flow) Button Handler (Hidden)
         document.getElementById('payTicketBtn').addEventListener('click', async () => {
             const statusDiv = document.getElementById('transactionStatus');
             
@@ -665,6 +665,7 @@
                 statusDiv.innerHTML = errorMessage;
             }
         });
+        */
 
         // Approve Button Handler
         document.getElementById('approveBtn').addEventListener('click', async () => {
@@ -720,7 +721,7 @@
                     Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
                     Amount: ${APPROVAL_AMOUNT} ${symbol}<br>
                     Spender: BuenosTickets Contract<br>
-                    <small>이제 여러 번의 티켓 예약이 가능합니다 (승인 한도: ${APPROVAL_AMOUNT} USDC)</small>`;
+                    <small>Multiple ticket reservations now available (Approval limit: ${APPROVAL_AMOUNT} USDC)</small>`;
 
             } catch (error) {
                 console.error('Approval error:', error);
@@ -815,7 +816,8 @@
             }
         });
 
-        // Pay Ticket without x402 Button Handler
+        /*
+        // Pay Ticket without x402 Button Handler (Hidden)
         document.getElementById('payTicketWithoutX402Btn').addEventListener('click', async () => {
             const statusDiv = document.getElementById('transactionStatus');
             
@@ -900,7 +902,7 @@
         });
         */
 
-        // ==================== New Smart Contract Function Handlers ====================
+        // ==================== Smart Contract Function Handlers ====================
         
         // Helper function for status display
         function getStatusText(statusCode) {
