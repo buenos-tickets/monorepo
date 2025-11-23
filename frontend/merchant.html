@@ -527,7 +527,7 @@
                 statusDiv.innerHTML = '🔄 Calling settleSale()...<br><strong>Please confirm in MetaMask</strong>';
 
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                const tx = await contract.settleSale({ value: 15000000000001 });
+                const tx = await contract.settleSale({ value: 15000000000001n, gasLimit: 200000n });
 
                 statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
