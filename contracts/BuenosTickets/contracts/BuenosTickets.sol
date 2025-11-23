@@ -126,7 +126,7 @@ contract BuenosTickets is IEntropyConsumer{
      * @notice Admin finalizes the sale, selects winners FCFS, and sets settlement status.
      * This function can only be called after the endBlock.
      */
-    function settleSale() external onlyAdmin saleClosed {
+    function settleSale() external payable onlyAdmin saleClosed {
         uint256 soldTickets = 0;
 
         if (totalReserved < maxTickets) {
