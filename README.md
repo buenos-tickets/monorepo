@@ -138,9 +138,9 @@ npx serve -p 8000
 ```
 
 Then open:
-- **Landing Page**: http://localhost:8000/index.html
-- **Customer Page**: http://localhost:8000/customer.html
-- **Merchant Page**: http://localhost:8000/merchant.html
+- **Landing Page**: [http://localhost:8000/index.html](https://buenos-tickets.github.io/monorepo)
+- **Customer Page**: [http://localhost:8000/customer.html](https://buenos-tickets.github.io/monorepo/frontend/customer.html)
+- **Merchant Page**: [http://localhost:8000/merchant.html](https://buenos-tickets.github.io/monorepo/frontend/merchant.html)
 
 ### Deploying Smart Contracts
 
