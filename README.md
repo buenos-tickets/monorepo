@@ -155,22 +155,27 @@ npx hardhat deploy --network baseSepolia
 ```mermaid
 sequenceDiagram
   participant Users
-  participant Seller
-  Seller->>Contract: Setup the campaign 
+  participant Merchant
+  Merchant->>Contract: Setup the campaign 
   Users->>Contract: Buy tickets
-  Users->>Contract: End sales by anyone
-  activate Contract
-  Contract->>Pyth: Request entropy
-  deactivate Contract
-  Pyth->>Contract: Return random number by callback
+  alt oversold
+    Merchant->>Contract: End sales
+    activate Contract
+    Contract->>Pyth: Request entropy
+    deactivate Contract
+    Pyth->>Contract: Return random number by callback
+    Merchant->>Contract: Request shuffle
+  else not oversold
+    Merchant->>Contract: End sales & All selected
+  end
   par check results
     Users->>Contract: Check results
   and refund
     Users->>Contract: Request refunds
     Contract->>Users: Refunds
   and settlement
-    Seller->>Contract: Request sales revenue
-    Contract->>Seller: Send the fund
+    Merchant->>Contract: Request sales revenue
+    Contract->>Merchant: Send the fund
   end
 ```
 
