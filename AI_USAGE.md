@@ -19,6 +19,25 @@ This file documents the use of AI tools during the project development process.
 - **Prompt**: A poster for a tango performance featuring a woman in a red dress.
 - **AI Role**: Generated tango poster image
 
+### [2025-11-23] Frontend Web Pages Development
+- **Files**: 
+  - `frontend/index.html` - Main landing page
+  - `frontend/customer.html` - Customer ticket reservation interface
+  - `frontend/merchant.html` - Merchant admin panel
+- **Tool**: Cursor IDE with Claude Sonnet 4.5
+- **AI Role**:
+  - Generated majority of frontend code including HTML structure, CSS styling, and JavaScript logic
+  - Implemented Web3/ethers.js integration for smart contract interaction
+  - Created UI/UX designs with responsive layouts
+  - Developed contract function handlers (getSaleInfo, getUserStatus, reserveTicket, refund, etc.)
+  - Built fireworks animation for winner celebration
+  - Implemented MetaMask wallet connection and transaction handling
+- **Human Role**:
+  - Provided requirements and specifications
+  - Reviewed and tested all generated code
+  - Made design decisions and iterative improvements
+  - Final code review and quality assurance
+
 ---
 
 ## Smart Contracts
