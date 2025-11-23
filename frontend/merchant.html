@@ -343,6 +343,7 @@
 
         // Contract Address
         const CONTRACT_ADDRESS = '0x55Cf458212822b33d8485969f4616FA8D9b6e1A7';
+        const V2_CONTRACT_ADDRESS = '0x41c9e39574F40Ad34c79f1C99B66A45eFB830d4c'; // base-sepolia entropy contract
 
         // BuenosTickets Contract ABI
         const CONTRACT_ABI = [
@@ -353,6 +354,9 @@
             'function reset() external',
             'function admin() view returns (address)',
             'function usdcToken() view returns (address)'
+        ];
+        const V2_CONTRACT_ABI = [
+            'function getFeeV2() external view override returns (uint128 feeAmount)'
         ];
 
         // Helper function to switch to Base Sepolia
@@ -526,8 +530,10 @@
 
                 statusDiv.innerHTML = '🔄 Calling settleSale()...<br><strong>Please confirm in MetaMask</strong>';
 
+                const v2_contract = new ethers.Contract(V2_CONTRACT_ADDRESS, V2_CONTRACT_ABI, provider);
+                const v2_value = await contract.getFeeV2();
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                const tx = await contract.settleSale({ value: 15000000000001n, gasLimit: 200000n });
+                const tx = await contract.settleSale({ value: v2_value, gasLimit: 200000n });
 
                 statusDiv.innerHTML = `🔄 Transaction submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
