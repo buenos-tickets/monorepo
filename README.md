@@ -28,8 +28,7 @@ Buenos Tickets implements a **fair ticket sales system** that ensures equal oppo
 
 1. **Time Window**: Tickets are sold during a fixed time period (e.g., 10 minutes)
 2. **Advance Payment**: Users pay in advance using USDC (ERC-20 token)
-3. **Random Selection**: After the sales period ends, winners are selected using **Pyth Network's verifiable random function (VRF)** for provably fair randomness
-4. **Automatic Refunds**: Users who are not selected automatically receive refunds
+3. **Random Selection**: After the sales period ends, winners are selected using **Pyth Network Entropy** for provably fair randomness
 
 ### How It Works
 
@@ -37,20 +36,19 @@ Buenos Tickets implements a **fair ticket sales system** that ensures equal oppo
 1. Admin sets up the sale (duration, price, max tickets)
 2. Users reserve tickets during the sales period
 3. Sales period ends
-4. If oversubscribed: Pyth Network generates random number
-5. Winners are selected using the random number
-6. Non-winners can claim refunds
-7. Admin withdraws revenue from selected tickets
+4. If oversubscribed, request Pyth Network to generate random number. Everybody are chosen if undersubscribed.
+5. Winners are chosen using the random number
+6. Users who are not chosen can refund
 ```
 
 ## Example: Tango Ticket Sales in Buenos Aires
-
+`
 Let's say a famous tango show in Buenos Aires wants to sell 100 tickets:
 
 1. **Setup**: The organizer sets up a sale for 10 minutes (600 blocks), price: 10 USDC per ticket, max: 100 tickets
 2. **Sales Period**: During the 10-minute window, 500 fans connect their MetaMask wallets and reserve tickets by paying 10 USDC each
 3. **Settlement**: After 10 minutes, the sale closes. Since 500 > 100, the contract requests a random number from Pyth Network
-4. **Random Selection**: Using Pyth's verifiable random number, 100 winners are selected fairly from the 500 participants
+4. **Random Selection**: Using Pyth Network Entropy, 100 winners are selected fairly from the 500 participants
 5. **Results**: 
    - 100 winners keep their tickets (10 USDC each = 1,000 USDC revenue)
    - 400 non-winners can claim refunds (400 × 10 USDC = 4,000 USDC refunded)
@@ -93,17 +91,17 @@ monorepo/
 ### Smart Contract Functions
 
 **Admin Functions:**
-- `setupSale()`: Configure sale parameters (duration, price, max tickets)
-- `settleSale()`: Finalize the sale and request Pyth entropy if needed
-- `spinWheel()`: Select winners using Pyth Network random number
-- `withdrawFunds()`: Withdraw revenue from selected tickets
-- `reset()`: Reset contract state
+- `setupSale`: Configure sale parameters (duration, price, max tickets)
+- `settleSale`: Finalize the sale and request Pyth entropy if needed
+- `spinWheel`: Select winners using Pyth Network random number
+- `withdrawFunds`: Withdraw revenue from selected tickets
+- `reset`: Reset contract state (Testing purpose)
 
 **User Functions:**
-- `reserveTicket()`: Reserve a ticket by paying USDC
-- `refund()`: Claim refund if not selected
-- `getSaleInfo()`: View sale configuration and status
-- `getUserStatus()`: Check reservation status (Unreserved, Reserved, Selected, Refunded)
+- `reserveTicket`: Reserve a ticket by paying USDC
+- `refund`: Claim refund if not selected
+- `getSaleInfo`: View sale configuration and status
+- `getUserStatus`: Check reservation status (Unreserved, Reserved, Selected, Refunded)
 
 ### Frontend Features
 
@@ -138,9 +136,9 @@ npx serve -p 8000
 ```
 
 Then open:
-- **Landing Page**: [http://localhost:8000/index.html](https://buenos-tickets.github.io/monorepo)
-- **Customer Page**: [http://localhost:8000/customer.html](https://buenos-tickets.github.io/monorepo/frontend/customer.html)
-- **Merchant Page**: [http://localhost:8000/merchant.html](https://buenos-tickets.github.io/monorepo/frontend/merchant.html)
+- **Landing Page**: https://buenos-tickets.github.io/monorepo/
+- **Customer Page**: https://buenos-tickets.github.io/monorepo/frontend/customer.html
+- **Merchant Page**: https://buenos-tickets.github.io/monorepo/frontend/merchant.html
 
 ### Deploying Smart Contracts
 
