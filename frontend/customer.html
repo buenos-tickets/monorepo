@@ -44,7 +44,7 @@
     </style>
 </head>
 <body>
-    <h1>Buenos Tickets - Customer (Pyth, x402 and Hardhat)</h1>
+    <h1>Buenos Tickets - Customer</h1>
 
     <!-- ==================== Section 1: Smart Contract Functions ==================== -->
     <div class="section">
@@ -74,30 +74,30 @@
 
         <div style="display: grid; grid-template-columns: 1fr; gap: 15px;">
             
-            <!-- getSaleInfo Button -->
-            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
-                <h4 style="margin-top: 0; color: #555;">📊 getSaleInfo()</h4>
-                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">판매 정보를 조회합니다 (읽기 전용)</p>
-                <button id="getSaleInfoBtn" style="
-                    background-color: #17a2b8;
-                    color: white;
-                    padding: 12px 24px;
-                    font-size: 14px;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    width: 100%;
-                ">
-                    Get Sale Info
-                </button>
-            </div>
+            <!-- getSaleInfo & getUserStatus Buttons (in one row) -->
+            <div style="display: flex; gap: 15px;">
+                <!-- getSaleInfo Button -->
+                <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #17a2b8;">
+                    <h4 style="margin-top: 0; color: #555;">📊 getSaleInfo()</h4>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">판매 정보를 조회합니다 (읽기 전용)</p>
+                    <button id="getSaleInfoBtn" style="
+                        background-color: #17a2b8;
+                        color: white;
+                        padding: 12px 24px;
+                        font-size: 14px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        width: 100%;
+                    ">
+                        Get Sale Info
+                    </button>
+                </div>
 
-            <!-- getUserStatus Button -->
-            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
-                <h4 style="margin-top: 0; color: #555;">👤 getUserStatus(address user)</h4>
-                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">사용자의 예약 상태를 조회합니다 (읽기 전용)</p>
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <input type="text" id="userStatusAddress" placeholder="0x..." style="flex: 1; padding: 10px;" value="connected wallet" />
+                <!-- getUserStatus Button -->
+                <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #6c757d;">
+                    <h4 style="margin-top: 0; color: #555;">👤 getUserStatus(address user)</h4>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">내 예약 상태를 조회합니다 (읽기 전용)</p>
                     <button id="getUserStatusBtn" style="
                         background-color: #6c757d;
                         color: white;
@@ -106,29 +106,11 @@
                         border: none;
                         border-radius: 4px;
                         cursor: pointer;
-                        white-space: nowrap;
+                        width: 100%;
                     ">
-                        Get Status
+                        Get My Status
                     </button>
                 </div>
-            </div>
-
-            <!-- refund Button -->
-            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9;">
-                <h4 style="margin-top: 0; color: #555;">💸 refund()</h4>
-                <p style="font-size: 0.9em; color: #666; margin: 5px 0;">당첨되지 않은 경우 환불을 받습니다 (트랜잭션 필요)</p>
-                <button id="refundBtn" style="
-                    background-color: #dc3545;
-                    color: white;
-                    padding: 12px 24px;
-                    font-size: 14px;
-                    border: none;
-                    border-radius: 4px;
-                    cursor: pointer;
-                    width: 100%;
-                ">
-                    Request Refund
-                </button>
             </div>
 
             <!-- Approve USDC & Reserve Ticket (2-step process in one row) -->
@@ -152,7 +134,7 @@
                     </div>
                     <div style="flex: 1;">
                         <button id="callMethodBtn" style="
-                            background-color: #9C27B0;
+                            background-color: #4CAF50;
                             color: white;
                             padding: 12px 24px;
                             font-size: 14px;
@@ -167,12 +149,76 @@
                 </div>
             </div>
 
+            <!-- refund & spinWheel Buttons (in one row) -->
+            <div style="display: flex; gap: 15px;">
+                <!-- refund Button -->
+                <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #dc3545;">
+                    <h4 style="margin-top: 0; color: #555;">💸 refund()</h4>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">당첨되지 않은 경우 환불을 받습니다 (트랜잭션 필요)</p>
+                    <button id="refundBtn" style="
+                        background-color: #dc3545;
+                        color: white;
+                        padding: 12px 24px;
+                        font-size: 14px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        width: 100%;
+                    ">
+                        Request Refund
+                    </button>
+                </div>
+
+                <!-- spinWheel Button -->
+                <div style="flex: 1; border: 1px solid #ddd; padding: 15px; border-radius: 5px; background-color: #f9f9f9; border-left: 4px solid #2196F3;">
+                    <h4 style="margin-top: 0; color: #555;">🎰 spinWheel()</h4>
+                    <p style="font-size: 0.9em; color: #666; margin: 5px 0;">Pyth Entropy를 사용하여 당첨자를 추첨합니다 (Admin 전용, 트랜잭션 필요)</p>
+                    <button id="spinWheelBtn" style="
+                        background-color: #2196F3;
+                        color: white;
+                        padding: 12px 24px;
+                        font-size: 14px;
+                        border: none;
+                        border-radius: 4px;
+                        cursor: pointer;
+                        width: 100%;
+                    ">
+                        Spin the Wheel
+                    </button>
+                </div>
+            </div>
+
         </div>
 
         <div id="contractCallStatus" style="margin-top: 15px; padding: 15px; display: none; border-radius: 5px;"></div>
     </div>
 
-    <!-- ==================== Section 2: Configuration ==================== -->
+    <!-- ==================== Section 2: Event Information ==================== -->
+    <div class="section">
+        <h2>💃 Event Information</h2>
+        <p><strong>Description:</strong> 아르헨티나의 열정이 담긴 탱고 공연 티켓을 예약하세요</p>
+        
+        <!-- Display event poster image -->
+        <div>
+            <h3>Poster</h3>
+            
+            <p><img src="assets/img/tango-poster-generated-gemini-ai.png" alt="Buenos Aires Tango Night" style="max-width: 100%;" /></p>
+        </div>
+
+        <!-- Display event details -->
+        <div>
+            <h3>Title</h3>
+            <p id="eventTitle">Buenos Aires Tango Night</p>
+
+            <h3>Description</h3>
+            <p id="eventDescription">세계적인 탱고 댄서들이 선사하는 열정적인 무대. 부에노스아이레스의 밤을 서울에서 만나보세요. 라이브 밴드 연주와 함께하는 클래식 탱고 퍼포먼스를 경험할 수 있는 특별한 기회입니다.</p>
+
+            <h3>Ticket Price</h3>
+            <p id="ticketPrice">0.01 USDC</p>
+        </div>
+    </div>
+
+    <!-- ==================== Section 3: Configuration ==================== -->
     <div class="section">
         <h2>⚙️ Configuration</h2>
         <p><strong>Description:</strong> Network and facilitator settings for x402 payment protocol. Pre-configured for Base Sepolia testnet.</p>
@@ -216,47 +262,7 @@
         </p>
     </div>
 
-    <!-- ==================== Section 3: Contract State Information ==================== -->
-    <div class="section">
-        <h2>📊 BuenosTickets Contract State</h2>
-        <p><strong>Description:</strong> Real-time status information retrieved from the smart contract.</p>
-        
-        <ul>
-            <li><strong>Deadline:</strong> <span id="deadline">[Query from contract]</span></li>
-            <li><strong>Total Tickets for Sale:</strong> <span id="totalTickets">[Query from contract]</span></li>
-            <li><strong>Number of Buyers:</strong> <span id="buyerCount">[Query from contract]</span></li>
-        </ul>
-    </div>
-
-    <!-- ==================== Section 4: Event Information ==================== -->
-    <div class="section">
-        <h2>🎭 Event Information</h2>
-        <p><strong>Description:</strong> Blah blah blah</p>
-        
-        <!-- TODO: Display event poster image -->
-        <div>
-            <h3>Poster</h3>
-            
-            <p><img src="assets/img/tango-poster-generated-gemini-ai.png" alt="" style="max-width: 100%;" /></p>
-        </div>
-
-        <!-- TODO: Display event details -->
-        <div>
-            <h3>Title</h3>
-            <p id="eventTitle">Blah blah blah</p>
-
-            <h3>Description</h3>
-            <p id="eventDescription">Blah blah blah</p>
-
-            <h3>Ticket Price</h3>
-            <p id="ticketPrice">0.01 USDC</p>
-
-            <h3>Deadline</h3>
-            <p id="eventDeadline">12 Dec 2025</p>
-        </div>
-    </div>
-
-    <!-- ==================== Section 5: Ticket Purchase ==================== -->
+    <!-- ==================== Section 4: Ticket Purchase ==================== -->
     <div class="section">
         <h2>🎫 Ticket Purchase</h2>
         <p><strong>Description:</strong> Choose your payment method below. x402 allows gasless transactions through a Facilitator.</p>
@@ -317,6 +323,7 @@
         const RECIPIENT_ADDRESS = '0xefa21bf6343748f95f6949f7aaa7df88f0ee6992';
         const AMOUNT = '0.001'; // USDC amount
         const TICKET_PRICE = '0.01'; // Fixed ticket price in USDC (for testing)
+        const APPROVAL_AMOUNT = '1000'; // USDC approval amount for Approve button
 
         // ERC20 ABI
         const ERC20_ABI = [
@@ -339,7 +346,8 @@
             'function usdcToken() view returns (address)',
             'function refund() external',
             'function getSaleInfo() external view returns (uint256 _endBlock, uint256 _ticketPrice, uint256 _maxTickets, uint256 _totalReserved, bool _isSettled)',
-            'function isSettled() view returns (bool)'
+            'function isSettled() view returns (bool)',
+            'function spinWheel() external'
         ];
 
         // Helper function to switch to Base Sepolia
@@ -631,13 +639,13 @@
                 const decimals = await usdcContract.decimals();
                 const symbol = await usdcContract.symbol();
 
-                // Use fixed ticket price
-                const ticketPriceInUnits = ethers.utils.parseUnits(TICKET_PRICE, decimals);
+                // Use approval amount (1000 USDC)
+                const approvalAmountInUnits = ethers.utils.parseUnits(APPROVAL_AMOUNT, decimals);
 
-                statusDiv.innerHTML = `🔄 Approving ${TICKET_PRICE} ${symbol} to BuenosTickets contract...<br>Please confirm in MetaMask`;
+                statusDiv.innerHTML = `🔄 Approving ${APPROVAL_AMOUNT} ${symbol} to BuenosTickets contract...<br>Please confirm in MetaMask`;
 
                 // Approve USDC to BuenosTickets contract
-                const tx = await usdcContract.approve(BUENOS_TICKETS_CONTRACT_ADDRESS, ticketPriceInUnits);
+                const tx = await usdcContract.approve(BUENOS_TICKETS_CONTRACT_ADDRESS, approvalAmountInUnits);
                 
                 statusDiv.innerHTML = `🔄 Approval submitted!<br>Hash: ${tx.hash}<br>Waiting for confirmation...`;
 
@@ -647,9 +655,9 @@
                 statusDiv.style.color = '#155724';
                 statusDiv.innerHTML = `✅ Approval successful!<br>
                     Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
-                    Amount: ${TICKET_PRICE} ${symbol}<br>
+                    Amount: ${APPROVAL_AMOUNT} ${symbol}<br>
                     Spender: BuenosTickets Contract<br>
-                    <small>Note: Deploy BuenosTickets contract before calling reserveTicket()</small>`;
+                    <small>이제 여러 번의 티켓 예약이 가능합니다 (승인 한도: ${APPROVAL_AMOUNT} USDC)</small>`;
 
             } catch (error) {
                 console.error('Approval error:', error);
@@ -914,7 +922,6 @@
         // getUserStatus Button Handler
         document.getElementById('getUserStatusBtn').addEventListener('click', async () => {
             const statusDiv = document.getElementById('contractCallStatus');
-            const addressInput = document.getElementById('userStatusAddress').value.trim();
             
             try {
                 if (typeof window.ethereum === 'undefined') {
@@ -925,26 +932,16 @@
                 statusDiv.style.display = 'block';
                 statusDiv.style.backgroundColor = '#fff3cd';
                 statusDiv.style.color = '#856404';
-                statusDiv.innerHTML = '🔄 컨트랙트 연결 중...';
+                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
 
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 await provider.send('eth_requestAccounts', []);
                 const signer = provider.getSigner();
                 const userAddress = await signer.getAddress();
 
+                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+
                 await switchToBaseSepolia();
-
-                // Determine which address to query
-                let queryAddress = addressInput;
-                if (!queryAddress || queryAddress === 'connected wallet') {
-                    queryAddress = userAddress;
-                    document.getElementById('userStatusAddress').value = userAddress;
-                }
-
-                // Validate address
-                if (!ethers.utils.isAddress(queryAddress)) {
-                    throw new Error('유효하지 않은 주소입니다');
-                }
 
                 // Connect to BuenosTickets contract (read-only)
                 const contract = new ethers.Contract(
@@ -953,9 +950,9 @@
                     provider
                 );
 
-                statusDiv.innerHTML = `🔄 getUserStatus(${queryAddress.substring(0, 10)}...) 호출 중...`;
+                statusDiv.innerHTML = `🔄 getUserStatus() 호출 중...`;
 
-                const status = await contract.getUserStatus(queryAddress);
+                const status = await contract.getUserStatus(userAddress);
                 const statusText = getStatusText(status);
                 
                 // Status color coding
@@ -968,9 +965,9 @@
 
                 statusDiv.style.backgroundColor = '#d4edda';
                 statusDiv.style.color = '#155724';
-                statusDiv.innerHTML = `✅ 사용자 상태 조회 성공!<br><br>
-                    <strong>👤 User Status:</strong><br>
-                    • <strong>Address:</strong> ${queryAddress}<br>
+                statusDiv.innerHTML = `✅ 내 상태 조회 성공!<br><br>
+                    <strong>👤 My Status:</strong><br>
+                    • <strong>Address:</strong> ${userAddress}<br>
                     • <strong>Status:</strong> <span style="color: ${statusColor}; font-weight: bold;">${statusEmoji} ${statusText} (${status})</span><br><br>
                     <small>
                         <strong>Status 설명:</strong><br>
@@ -1098,6 +1095,79 @@
                     errorMessage = '❌ 이미 당첨되었거나 환불을 받았습니다';
                 } else if (error.message && error.message.includes('Sale must be settled first')) {
                     errorMessage = '❌ 추첨이 아직 진행되지 않았습니다. 추첨 완료 후 환불 가능합니다.';
+                } else {
+                    errorMessage = `❌ 에러: ${error.message}`;
+                }
+                
+                statusDiv.innerHTML = errorMessage;
+            }
+        });
+
+        // spinWheel Button Handler
+        document.getElementById('spinWheelBtn').addEventListener('click', async () => {
+            const statusDiv = document.getElementById('contractCallStatus');
+            
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('메타마스크를 설치해주세요!');
+                    return;
+                }
+
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#fff3cd';
+                statusDiv.style.color = '#856404';
+                statusDiv.innerHTML = '🔄 메타마스크 연결 중...';
+
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                await provider.send('eth_requestAccounts', []);
+                const signer = provider.getSigner();
+                const userAddress = await signer.getAddress();
+
+                statusDiv.innerHTML = `🔄 연결됨: ${userAddress}<br>네트워크 확인 중...`;
+
+                await switchToBaseSepolia();
+
+                // Connect to BuenosTickets contract
+                const contract = new ethers.Contract(
+                    BUENOS_TICKETS_CONTRACT_ADDRESS, 
+                    BUENOS_TICKETS_ABI, 
+                    signer
+                );
+
+                statusDiv.innerHTML = '🔄 spinWheel() 호출 중...<br><strong>메타마스크에서 확인해주세요</strong><br><br><small>⚠️ Admin 권한이 필요합니다</small>';
+
+                // Call spinWheel()
+                const tx = await contract.spinWheel();
+                
+                statusDiv.innerHTML = `🔄 트랜잭션 제출됨!<br>Hash: ${tx.hash}<br>확인 대기 중...<br><small>Pyth Entropy를 사용한 랜덤 추첨 진행 중...</small>`;
+
+                const receipt = await tx.wait();
+
+                statusDiv.style.backgroundColor = '#d4edda';
+                statusDiv.style.color = '#155724';
+                statusDiv.innerHTML = `✅ 추첨 완료!<br>
+                    Hash: <a href="https://sepolia.basescan.org/tx/${receipt.transactionHash}" target="_blank" style="color: #155724;">${receipt.transactionHash.substring(0, 20)}...</a><br>
+                    Block: ${receipt.blockNumber}<br>
+                    <small>🎰 Pyth Entropy를 사용한 랜덤 추첨이 완료되었습니다.<br>
+                    당첨자가 선정되었고, 낙첨자는 환불을 받을 수 있습니다.</small>`;
+
+            } catch (error) {
+                console.error('spinWheel error:', error);
+                statusDiv.style.display = 'block';
+                statusDiv.style.backgroundColor = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                
+                let errorMessage = '추첨 실패!';
+                if (error.code === 4001) {
+                    errorMessage = '❌ 사용자가 트랜잭션을 거부했습니다';
+                } else if (error.message && error.message.includes('Only admin')) {
+                    errorMessage = '❌ Admin 권한이 필요합니다';
+                } else if (error.message && error.message.includes('Sale is still active')) {
+                    errorMessage = '❌ 판매 기간이 아직 종료되지 않았습니다';
+                } else if (error.message && error.message.includes('already settled')) {
+                    errorMessage = '❌ 이미 추첨이 완료되었습니다';
+                } else if (error.message && error.message.includes('Invalid Pyth Entropy')) {
+                    errorMessage = '❌ Pyth Entropy 콜백이 아직 실행되지 않았습니다. settleSale() 실행 후 대기해주세요.';
                 } else {
                     errorMessage = `❌ 에러: ${error.message}`;
                 }
